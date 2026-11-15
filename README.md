@@ -15,3 +15,9 @@
 - `worker/worker.js`: Cloudflare Worker 중계 서버. API 키·접속 코드는 Cloudflare 비밀값으로만 저장 (코드에 없음)
 - `config.js`의 `AI_ENDPOINT`에 Worker 주소를 넣으면 켜짐
 - 지인은 '내 정보'에서 접속 코드 입력 (또는 링크 끝에 `?code=코드`)
+
+## 사진 보정·구도 (요청 → AI → 휴대폰에서 적용)
+- 사용자가 색감·구도·속도 요청을 적으면 Claude Opus 5.5가 사진별 보정값(밝기·대비·채도·색온도·노출·비네팅·선명도), 구도(9:16 채우기/전체보기, 중심점, 줌), 영상 속도·자막 위치를 정함
+- `edit.js`가 휴대폰 안에서 적용 (사진은 저장 서버로 가지 않음)
+- 오픈소스: `vendor/glfx.js` (WebGL 색보정, MIT), `vendor/smartcrop.js` (9:16 자동 구도, MIT)
+- AI 연결 실패 시 기본 자막으로 만들지 않고 '다시 시도' 화면 표시

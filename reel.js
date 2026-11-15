@@ -55,7 +55,9 @@
   }
 
   // ---------- 3. 휴대폰 안에서 영상 만들기 (캔버스 + MediaRecorder) ----------
-  var W_ = 720, H_ = 1280, FPS = 30, SLIDE = 3.0, FADE = 0.5;
+  // 사진 보정·구도는 edit.js(glfx.js + smartcrop.js)가 AI 보정값대로 먼저 처리한다.
+  var W_ = 720, H_ = 1280, FPS = 30, FADE = 0.5;
+  var FONT = "'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
   function pickMime() {
     var c = ["video/mp4;codecs=avc1.42E01E", "video/mp4", "video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
     for (var i = 0; i < c.length; i++) if (W.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c[i])) return c[i];
@@ -65,75 +67,77 @@
     return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = src; });
   }
   function wrap(ctx, text, maxW) {
-    var words = text.split(" "), lines = [], cur = "";
+    var words = String(text).split(" "), lines = [], cur = "";
     words.forEach(function (w) { var t = cur ? cur + " " + w : w; if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; });
     if (cur) lines.push(cur);
     return lines;
   }
-  function drawFrame(ctx, imgs, caps, title, t) {
-    var step = SLIDE - FADE;
+  function drawFrame(ctx, slides, caps, title, t, vid) {
+    var SLIDE = vid.slideSeconds, step = SLIDE - FADE;
     ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W_, H_);
-    for (var i = 0; i < imgs.length; i++) {
+    for (var i = 0; i < slides.length; i++) {
       var st = i * step, lt = t - st;
       if (lt < 0 || lt > SLIDE) continue;
       var a = Math.min(1, lt / FADE, (SLIDE - lt) / FADE);
       if (i === 0) a = Math.min(1, (SLIDE - lt) / FADE);
-      if (i === imgs.length - 1 && lt >= FADE) a = Math.min(1, lt / FADE);
+      if (i === slides.length - 1 && lt >= FADE) a = Math.min(1, lt / FADE);
       ctx.globalAlpha = Math.max(0, a);
-      var im = imgs[i];
-      // 흐린 배경 (가로 사진도 세로 화면을 꽉 채우도록)
-      var sc = Math.max(W_ / im.width, H_ / im.height) * 1.15;
-      try { ctx.filter = "blur(24px) brightness(0.55)"; } catch (e) {}
-      ctx.drawImage(im, (W_ - im.width * sc) / 2, (H_ - im.height * sc) / 2, im.width * sc, im.height * sc);
-      try { ctx.filter = "none"; } catch (e) {}
-      ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.fillRect(0, 0, W_, H_);
-      // 실제 사진 (천천히 확대/축소)
-      var z = i % 2 === 0 ? 1 + 0.12 * (lt / SLIDE) : 1.12 - 0.12 * (lt / SLIDE);
-      var fs = Math.min(W_ / im.width, H_ / im.height) * z;
-      ctx.drawImage(im, (W_ - im.width * fs) / 2, (H_ - im.height * fs) / 2, im.width * fs, im.height * fs);
-      // 자막
+      var sl = slides[i], k = lt / SLIDE;
+      var z = sl.zoom === "none" ? 1 : sl.zoom === "out" ? 1.12 - 0.12 * k : 1 + 0.12 * k;
+      if (sl.mode === "fill") {
+        ctx.drawImage(sl.fg, (W_ - W_ * z) / 2, (H_ - H_ * z) / 2, W_ * z, H_ * z);
+      } else {
+        ctx.drawImage(sl.bg, 0, 0, W_, H_);
+        var fs = Math.min(W_ / sl.fg.width, H_ / sl.fg.height) * z;
+        ctx.drawImage(sl.fg, (W_ - sl.fg.width * fs) / 2, (H_ - sl.fg.height * fs) / 2, sl.fg.width * fs, sl.fg.height * fs);
+      }
       var cap = caps[i] || "";
       if (cap) {
         var p = Math.min(1, Math.max(0, (lt - 0.25) / 0.4));
         ctx.globalAlpha = Math.max(0, a) * p;
-        ctx.font = "800 46px 'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
-        ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 16;
-        ctx.fillStyle = "#fff";
-        var lines = wrap(ctx, cap, W_ - 100), y0 = H_ - 300 + (1 - p) * 30;
-        lines.forEach(function (l, k) { ctx.fillText(l, W_ / 2, y0 + k * 60); });
+        ctx.font = "800 46px " + FONT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 16; ctx.fillStyle = "#fff";
+        var lines = wrap(ctx, cap, W_ - 100);
+        var baseY = vid.captionPosition === "top" ? 330 : vid.captionPosition === "middle" ? H_ / 2 : H_ - 300;
+        var y0 = baseY + (1 - p) * 30;
+        lines.forEach(function (l, n) { ctx.fillText(l, W_ / 2, y0 + n * 60); });
         ctx.shadowBlur = 0;
       }
     }
-    // 첫 2초 제목
     if (title && t < 2.2) {
       ctx.globalAlpha = Math.min(1, t / 0.3, (2.2 - t) / 0.3);
-      ctx.font = "900 56px 'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
-      ctx.textAlign = "center"; ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 20; ctx.fillStyle = "#fff";
-      wrap(ctx, title, W_ - 100).forEach(function (l, k) { ctx.fillText(l, W_ / 2, 200 + k * 70); });
+      ctx.font = "900 56px " + FONT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 20; ctx.fillStyle = "#fff";
+      wrap(ctx, title, W_ - 100).forEach(function (l, n) { ctx.fillText(l, W_ / 2, 200 + n * 70); });
       ctx.shadowBlur = 0;
     }
     ctx.globalAlpha = 1;
   }
-  function render(photos, caps, title, onProgress) {
+  // opts: { edits: [사진별 보정값], video: { slideSeconds, captionPosition } }
+  function render(photos, caps, title, opts, onProgress) {
+    opts = opts || {};
     var mime = pickMime();
     if (!mime) return Promise.reject(new Error("이 휴대폰 브라우저는 영상 만들기를 지원하지 않아요."));
-    return Promise.all(photos.map(loadImg)).then(function (imgs) {
+    var vid = opts.video || {};
+    vid = { slideSeconds: Math.max(1.5, Math.min(5, Number(vid.slideSeconds) || 3)), captionPosition: vid.captionPosition || "bottom" };
+    var edits = opts.edits || [];
+    var prep = photos.map(function (p, i) { return W.ReelEdit.prepare(p, edits[i] || {}); });
+    return Promise.all(prep).then(function (slides) {
       var c = document.createElement("canvas"); c.width = W_; c.height = H_;
       var ctx = c.getContext("2d");
-      var total = imgs.length * (SLIDE - FADE) + FADE;
+      var total = slides.length * (vid.slideSeconds - FADE) + FADE;
       var stream = c.captureStream(FPS);
       var rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 6000000 });
       var chunks = [];
       rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
       return new Promise(function (res) {
         rec.onstop = function () { res({ blob: new Blob(chunks, { type: mime.split(";")[0] }), mime: mime, duration: total }); };
-        drawFrame(ctx, imgs, caps, title, 0);
+        drawFrame(ctx, slides, caps, title, 0, vid);
         rec.start(250);
         var t0 = performance.now();
         (function loop() {
           var t = (performance.now() - t0) / 1000;
-          drawFrame(ctx, imgs, caps, title, Math.min(t, total));
+          drawFrame(ctx, slides, caps, title, Math.min(t, total), vid);
           if (onProgress) onProgress(Math.min(1, t / total));
           if (t < total) requestAnimationFrame(loop); else setTimeout(function () { rec.stop(); }, 150);
         })();

@@ -65,7 +65,7 @@
         });
       })).then(function (out) {
         out = out.filter(Boolean);
-        return St.set("draftPhotos", out).then(function () { showPicked(out); toast(out.length + "장을 휴대폰에 저장했어요"); });
+        return St.set("draftPhotos", out).then(function () { return St.set("remake", null); }).then(function () { showPicked(out); toast(out.length + "장을 휴대폰에 저장했어요"); });
       });
     };
     inp.click();
@@ -80,7 +80,7 @@
     });
   }
 
-  // ---------- AI(Claude Opus 5.5) 자막: 중계 서버 경유 ----------
+  // ---------- AI(Claude Opus 5.5): 자막 + 보정값 + 구도 (중계 서버 경유) ----------
   var CFG = window.REELMATE_CONFIG || {};
   (function () { var c = qs("code"); if (c) St.set("accessCode", c); })();
   function shrink(dataUrl, maxEdge) {
@@ -95,46 +95,88 @@
       im.src = dataUrl;
     });
   }
-  function aiCaptions(photos, mood) {
-    if (!CFG.AI_ENDPOINT) return Promise.resolve(null);
+  function AiError(msg, kind) { var e = new Error(msg); e.kind = kind; return e; }
+  // AI 계획 받기 (실패하면 예외 → 다시 시도 화면)
+  function aiPlan(photos, mood, request, keepCaps) {
+    if (!CFG.AI_ENDPOINT) return Promise.reject(AiError("AI 서버가 아직 연결되지 않았어요.", "setup"));
     return St.get("accessCode").then(function (code) {
-      if (!code) { toast("AI 자막은 '내 정보'에서 접속 코드를 넣으면 켜져요"); return null; }
+      if (!code) throw AiError("AI 접속 코드가 없어요. '내 정보'에서 코드를 넣어주세요.", "code");
       return Promise.all(photos.map(function (p) { return shrink(p, 1000); })).then(function (imgs) {
         return fetch(CFG.AI_ENDPOINT, {
           method: "POST", headers: { "Content-Type": "application/json", "X-Access-Code": code },
-          body: JSON.stringify({ images: imgs.filter(Boolean), mood: mood })
-        }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "AI 오류"); return j; }); });
+          body: JSON.stringify({ images: imgs.filter(Boolean), mood: mood, request: request || "", captions: keepCaps || null })
+        }).catch(function () { throw AiError("인터넷 연결을 확인해주세요.", "network"); })
+          .then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (j) {
+              if (r.status === 401) throw AiError(j.error || "접속 코드가 맞지 않아요.", "code");
+              if (!r.ok) throw AiError(j.error || "AI 응답 오류 (" + r.status + ")", "server");
+              if (!j.captions || !j.captions.length) throw AiError("AI가 자막을 만들지 못했어요.", "server");
+              return j;
+            });
+          });
       });
-    }).catch(function (e) { toast("AI 자막 실패: " + e.message + " (기본 자막 사용)"); return null; });
+    });
+  }
+  function setStep(text) {
+    var el = null;
+    document.querySelectorAll("p,span,div,h1,h2").forEach(function (x) { if (!el && x.children.length === 0 && /생성 중|렌더링 중/.test(textOf(x))) el = x; });
+    if (el) el.textContent = text;
+  }
+  function showRetry(err) {
+    var ov = document.createElement("div");
+    ov.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(11,11,15,.94);display:flex;align-items:center;justify-content:center;padding:24px";
+    var codeBtn = err.kind === "code" || err.kind === "setup" ? '<button id="rm-code-go" style="width:100%;margin-top:10px;padding:14px;border-radius:999px;border:1px solid #2E2E3E;background:#181820;color:#fff;font:700 15px sans-serif">접속 코드 넣으러 가기</button>' : "";
+    ov.innerHTML = '<div style="width:100%;max-width:360px;background:#181820;border:1px solid #2E2E3E;border-radius:24px;padding:24px;color:#fff;font-family:sans-serif;text-align:center">' +
+      '<div style="font-size:40px">⚠️</div><div style="font:800 18px sans-serif;margin:8px 0">AI 연결에 실패했어요</div>' +
+      '<div style="color:#A2A2BA;font-size:14px;line-height:1.5;margin-bottom:18px">' + String(err.message).replace(/</g, "&lt;") + '</div>' +
+      '<button id="rm-retry" style="width:100%;padding:14px;border-radius:999px;border:0;color:#fff;font:800 15px sans-serif;background:linear-gradient(135deg,#FF3D7F,#FF8A3D)">다시 시도</button>' + codeBtn +
+      '<button id="rm-back" style="width:100%;margin-top:10px;padding:12px;border:0;background:none;color:#A2A2BA;font:600 14px sans-serif">이전으로</button></div>';
+    document.body.appendChild(ov);
+    ov.querySelector("#rm-retry").onclick = function () { ov.remove(); makeReel(); };
+    ov.querySelector("#rm-back").onclick = function () { history.back(); };
+    var cg = ov.querySelector("#rm-code-go"); if (cg) cg.onclick = function () { go("mypage"); };
   }
 
-  // ---------- 제작 중: 실제로 영상 만들기 ----------
-  function makeReel(captionsOverride) {
+  // ---------- 제작 중: AI 계획 → 보정·구도 적용 → 영상 만들기 ----------
+  function makeReel() {
     var bigNum = null;
     document.querySelectorAll("span,div,p").forEach(function (el) { if (!bigNum && el.children.length === 0 && /^\d{1,3}$/.test(textOf(el))) bigNum = el; });
-    return Promise.all([St.get("draftPhotos"), St.get("draftMood")]).then(function (r) {
-      var photos = r[0] || [], mood = r[1] || "AI에게 맡기기";
+    if (bigNum) bigNum.textContent = "0";
+    return Promise.all([St.get("draftPhotos"), St.get("draftMood"), St.get("draftRequest"), St.get("remake")]).then(function (r) {
+      var photos = r[0] || [], mood = r[1] || "AI에게 맡기기", remake = r[3] || null;
+      var request = remake ? (remake.request || "") : (r[2] || "");
       if (!photos.length) { toast("먼저 사진을 골라주세요"); setTimeout(function () { go("capture"); }, 1200); return; }
-      var d = new Date(), title = mood.replace("AI에게 맡기기", "오늘의 기록") + " · " + (d.getMonth() + 1) + "월 " + d.getDate() + "일";
-      var hashtags = [];
-      var aiStep = captionsOverride ? Promise.resolve(null) : aiCaptions(photos, mood);
-      return aiStep.then(function (ai) {
-        var caps = captionsOverride || (ai && ai.captions && ai.captions.length ? ai.captions : R.captionsFor(mood, photos.length));
-        if (ai && ai.title) title = ai.title;
-        if (ai && ai.hashtags) hashtags = ai.hashtags;
-        if (captionsOverride) return St.get("remakeTitle").then(function (t) { if (t) title = t; return caps; });
-        return caps;
-      }).then(function (caps) {
-      return R.render(photos, caps, title, function (p) { if (bigNum) bigNum.textContent = Math.round(p * 100); })
-        .then(function (out) {
-          return R.thumbOf(photos[0]).then(function (thumb) {
-            var proj = { id: "p" + Date.now(), createdAt: Date.now(), title: title, mood: mood, captions: caps, hashtags: hashtags,
-              photos: photos, thumb: thumb, video: out.blob, mime: out.mime, duration: out.duration };
-            return St.saveProject(proj).then(function () { return St.set("currentId", proj.id); }).then(function () { go("preview"); });
+      setStep("Claude가 사진을 분석하고 보정 계획을 세우는 중...");
+      return aiPlan(photos, mood, request, remake ? remake.captions : null).then(function (ai) {
+        setStep("요청대로 보정하고 영상을 만드는 중...");
+        var title = ai.title || (mood + " 릴스");
+        var caps = ai.captions;
+        return R.render(photos, caps, title, { edits: ai.edits, video: ai.video }, function (p) { if (bigNum) bigNum.textContent = Math.round(p * 100); })
+          .then(function (out) {
+            return R.thumbOf(photos[0]).then(function (thumb) {
+              var proj = { id: "p" + Date.now(), createdAt: Date.now(), title: title, mood: mood, captions: caps, hashtags: ai.hashtags || [],
+                request: request, edits: ai.edits, note: ai.note || "",
+                photos: photos, thumb: thumb, video: out.blob, mime: out.mime, duration: out.duration, videoPlan: ai.video };
+              return St.saveProject(proj).then(function () { return St.set("remake", null); })
+                .then(function () { return St.set("currentId", proj.id); }).then(function () { go("preview"); });
+            });
           });
-        });
       });
-    }).catch(function (e) { toast(e.message || "영상 만들기에 실패했어요"); });
+    }).catch(function (e) { showRetry(e.kind ? e : AiError(e.message || "영상 만들기에 실패했어요", "render")); });
+  }
+
+  // 요청 입력칸 (분위기 화면 / 미리보기 화면)
+  function requestBox(id, title, hint, value, onInput) {
+    var box = document.createElement("div");
+    box.style.cssText = "margin:12px 16px;padding:14px;border-radius:16px;background:#181820;border:1px solid #2E2E3E;color:#fff;font:14px sans-serif";
+    box.innerHTML = '<div style="font-weight:800;margin-bottom:6px">' + title + '</div>' +
+      '<div style="color:#A2A2BA;font-size:12px;margin-bottom:8px">' + hint + '</div>' +
+      '<textarea id="' + id + '" rows="3" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:1px solid #2E2E3E;background:#0B0B0F;color:#fff;font:14px sans-serif;resize:vertical"></textarea>';
+    var ta = box.querySelector("textarea"); ta.value = value || "";
+    ta.placeholder = "예) 따뜻하고 필름 느낌으로, 인물을 화면 가운데에, 전체적으로 조금 밝게, 자막은 위쪽에";
+    ta.addEventListener("input", function () { onInput(ta.value); });
+    ta.addEventListener("click", function (e) { e.stopPropagation(); }, true);
+    return box;
   }
 
   // ---------- 미리보기: 만든 영상 재생 + 휴대폰에 저장 ----------
@@ -155,6 +197,11 @@
       var inp = document.querySelector("input");
       if (inp) { inp.value = p.captions.join(" / "); inp.placeholder = "자막을 ' / '로 나눠 고친 뒤 '다시 만들기'"; }
       pill("📥 휴대폰에 저장", function () { R.exportVideo(p); }, 96);
+      if (p.note) toast("적용한 보정: " + p.note);
+      var anchor = document.querySelector("input");
+      var holder = anchor ? anchor.closest("section,div") : null;
+      var rb = requestBox("rm-req2", "✏️ 수정 요청 (AI가 다시 보정)", "바꾸고 싶은 색감·구도·속도를 적고 '다시 만들기'를 누르세요. 위 자막 칸을 고치면 그 자막을 유지해요.", "", function () {});
+      if (holder && holder.parentNode) holder.parentNode.insertBefore(rb, holder.nextSibling); else (document.querySelector("main") || document.body).appendChild(rb);
     });
   }
 
@@ -215,8 +262,13 @@
       else if (to === "REMAKE") {
         var inp = document.querySelector("input");
         var caps = inp && inp.value ? inp.value.split("/").map(function (s) { return s.trim(); }) : null;
-        var h1 = document.querySelector("h1");
-        St.set("remakeCaps", caps).then(function () { return St.set("remakeTitle", h1 ? textOf(h1) : null); }).then(function () { go("creating"); });
+        var rq = document.querySelector("#rm-req2");
+        var req = rq && rq.value.trim() ? rq.value.trim() : "";
+        St.get("currentId").then(function (id) { return St.getProject(id); }).then(function (p) {
+          var full = [p && p.request, req].filter(Boolean).join(" / 추가 요청: ");
+          return St.set("draftPhotos", p ? p.photos : null).then(function () { return St.set("draftMood", p ? p.mood : null); })
+            .then(function () { return St.set("remake", { request: full, captions: caps }); });
+        }).then(function () { go("creating"); });
       }
       else go(to);
       return;
@@ -228,7 +280,14 @@
   document.addEventListener("error", function (e) { var t = e.target; if (t && t.tagName === "IMG" && t.src !== PH) { t.removeAttribute("srcset"); t.src = PH; } }, true);
 
   if (S === "capture") St.get("draftPhotos").then(function (ph) { if (ph && ph.length) showPicked(ph); });
-  if (S === "creating") St.get("remakeCaps").then(function (caps) { St.set("remakeCaps", null); return makeReel(caps || null); });
+  if (S === "creating") makeReel();
+  if (S === "mood") St.get("draftRequest").then(function (v) {
+    var box = requestBox("rm-req", "🎨 보정·구도 요청 (선택)", "원하는 색감, 구도, 분위기, 속도를 자유롭게 적으면 Claude가 그대로 보정해요.", v, function (t) { St.set("draftRequest", t); });
+    var main = document.querySelector("main") || document.body;
+    var btn = null; document.querySelectorAll("button").forEach(function (b) { if (/다음/.test(textOf(b))) btn = b; });
+    var host = btn ? btn.parentElement : null;
+    if (host && host.parentNode) host.parentNode.insertBefore(box, host); else main.appendChild(box);
+  });
   if (S === "preview") setupPreview();
   if (S === "library") setupLibrary();
   if (S === "mypage") St.get("accessCode").then(function (code) {

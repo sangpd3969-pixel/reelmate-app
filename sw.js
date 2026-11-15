@@ -1,6 +1,6 @@
 // ReelMate 오프라인 캐시: 앱 파일은 먼저 저장본을, 나머지는 네트워크를 사용
-const CACHE = "reelmate-v3";
-const FILES = ["./", "./index.html", "./nav.js", "./reel.js", "./config.js", "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png",
+const CACHE = "reelmate-v4";
+const FILES = ["./", "./index.html", "./nav.js", "./reel.js", "./config.js", "./edit.js", "./vendor/glfx.js", "./vendor/smartcrop.js", "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png",
   "onboarding","login","connect","home","capture","mood","creating","preview","publish","done","library","schedule","mypage"]
   .map(f => f.startsWith(".") ? f : "./screens/" + f + ".html");
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
