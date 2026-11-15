@@ -10,3 +10,8 @@
 휴대폰 설치: https://sangpd3969-pixel.github.io/reelmate-app/ 접속 후
 - 안드로이드(크롬): 메뉴 ⋮ → "앱 설치" 또는 "홈 화면에 추가"
 - 아이폰(사파리): 공유 버튼 → "홈 화면에 추가"
+
+## AI 자막 (Claude Opus 5.5)
+- `worker/worker.js`: Cloudflare Worker 중계 서버. API 키·접속 코드는 Cloudflare 비밀값으로만 저장 (코드에 없음)
+- `config.js`의 `AI_ENDPOINT`에 Worker 주소를 넣으면 켜짐
+- 지인은 '내 정보'에서 접속 코드 입력 (또는 링크 끝에 `?code=코드`)

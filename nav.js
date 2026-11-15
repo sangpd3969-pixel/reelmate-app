@@ -80,6 +80,34 @@
     });
   }
 
+  // ---------- AI(Claude Opus 5.5) 자막: 중계 서버 경유 ----------
+  var CFG = window.REELMATE_CONFIG || {};
+  (function () { var c = qs("code"); if (c) St.set("accessCode", c); })();
+  function shrink(dataUrl, maxEdge) {
+    return new Promise(function (res) {
+      var im = new Image();
+      im.onload = function () {
+        var s = Math.min(1, maxEdge / Math.max(im.width, im.height));
+        var c = document.createElement("canvas"); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", 0.8));
+      };
+      im.onerror = function () { res(null); };
+      im.src = dataUrl;
+    });
+  }
+  function aiCaptions(photos, mood) {
+    if (!CFG.AI_ENDPOINT) return Promise.resolve(null);
+    return St.get("accessCode").then(function (code) {
+      if (!code) { toast("AI 자막은 '내 정보'에서 접속 코드를 넣으면 켜져요"); return null; }
+      return Promise.all(photos.map(function (p) { return shrink(p, 1000); })).then(function (imgs) {
+        return fetch(CFG.AI_ENDPOINT, {
+          method: "POST", headers: { "Content-Type": "application/json", "X-Access-Code": code },
+          body: JSON.stringify({ images: imgs.filter(Boolean), mood: mood })
+        }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "AI 오류"); return j; }); });
+      });
+    }).catch(function (e) { toast("AI 자막 실패: " + e.message + " (기본 자막 사용)"); return null; });
+  }
+
   // ---------- 제작 중: 실제로 영상 만들기 ----------
   function makeReel(captionsOverride) {
     var bigNum = null;
@@ -88,15 +116,24 @@
       var photos = r[0] || [], mood = r[1] || "AI에게 맡기기";
       if (!photos.length) { toast("먼저 사진을 골라주세요"); setTimeout(function () { go("capture"); }, 1200); return; }
       var d = new Date(), title = mood.replace("AI에게 맡기기", "오늘의 기록") + " · " + (d.getMonth() + 1) + "월 " + d.getDate() + "일";
-      var caps = captionsOverride || R.captionsFor(mood, photos.length);
+      var hashtags = [];
+      var aiStep = captionsOverride ? Promise.resolve(null) : aiCaptions(photos, mood);
+      return aiStep.then(function (ai) {
+        var caps = captionsOverride || (ai && ai.captions && ai.captions.length ? ai.captions : R.captionsFor(mood, photos.length));
+        if (ai && ai.title) title = ai.title;
+        if (ai && ai.hashtags) hashtags = ai.hashtags;
+        if (captionsOverride) return St.get("remakeTitle").then(function (t) { if (t) title = t; return caps; });
+        return caps;
+      }).then(function (caps) {
       return R.render(photos, caps, title, function (p) { if (bigNum) bigNum.textContent = Math.round(p * 100); })
         .then(function (out) {
           return R.thumbOf(photos[0]).then(function (thumb) {
-            var proj = { id: "p" + Date.now(), createdAt: Date.now(), title: title, mood: mood, captions: caps,
+            var proj = { id: "p" + Date.now(), createdAt: Date.now(), title: title, mood: mood, captions: caps, hashtags: hashtags,
               photos: photos, thumb: thumb, video: out.blob, mime: out.mime, duration: out.duration };
             return St.saveProject(proj).then(function () { return St.set("currentId", proj.id); }).then(function () { go("preview"); });
           });
         });
+      });
     }).catch(function (e) { toast(e.message || "영상 만들기에 실패했어요"); });
   }
 
@@ -178,7 +215,8 @@
       else if (to === "REMAKE") {
         var inp = document.querySelector("input");
         var caps = inp && inp.value ? inp.value.split("/").map(function (s) { return s.trim(); }) : null;
-        St.set("remakeCaps", caps).then(function () { go("creating"); });
+        var h1 = document.querySelector("h1");
+        St.set("remakeCaps", caps).then(function () { return St.set("remakeTitle", h1 ? textOf(h1) : null); }).then(function () { go("creating"); });
       }
       else go(to);
       return;
@@ -193,6 +231,18 @@
   if (S === "creating") St.get("remakeCaps").then(function (caps) { St.set("remakeCaps", null); return makeReel(caps || null); });
   if (S === "preview") setupPreview();
   if (S === "library") setupLibrary();
+  if (S === "mypage") St.get("accessCode").then(function (code) {
+    var box = document.createElement("div");
+    box.style.cssText = "margin:12px 16px;padding:14px;border-radius:16px;background:#181820;border:1px solid #2E2E3E;color:#fff;font:14px sans-serif";
+    box.innerHTML = '<div style="font-weight:700;margin-bottom:8px">🤖 AI 자막 접속 코드</div>' +
+      '<div style="color:#A2A2BA;font-size:12px;margin-bottom:10px">앱을 공유해 준 사람에게 받은 코드를 넣으면 Claude가 사진을 보고 자막을 써줘요.</div>' +
+      '<div style="display:flex;gap:8px"><input id="rm-code" type="password" placeholder="접속 코드" style="flex:1;padding:10px 12px;border-radius:12px;border:1px solid #2E2E3E;background:#0B0B0F;color:#fff">' +
+      '<button id="rm-save" style="padding:10px 16px;border-radius:12px;border:0;color:#fff;font-weight:700;background:linear-gradient(135deg,#FF3D7F,#FF8A3D)">저장</button></div>';
+    var main = document.querySelector("main") || document.body;
+    main.insertBefore(box, main.firstChild);
+    var inp = box.querySelector("#rm-code"); if (code) inp.value = code;
+    box.querySelector("#rm-save").onclick = function (e) { e.stopPropagation(); St.set("accessCode", inp.value.trim()).then(function () { toast(inp.value.trim() ? "접속 코드를 저장했어요" : "접속 코드를 지웠어요"); }); };
+  });
   if (S === "publish") St.get("currentId").then(function (id) { return id && St.getProject(id); }).then(function (p) {
     if (p) pill("📥 휴대폰에 저장", function () { R.exportVideo(p); }, 150);
   });
