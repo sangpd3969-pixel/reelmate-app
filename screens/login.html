@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ReelMate - 로그인</title>
+<!-- Pretendard & Plus Jakarta Sans Font CDN -->
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#90003e",
+            "surface-dim": "#13131a",
+            "on-tertiary-fixed-variant": "#5516be",
+            "secondary-container": "#b95502",
+            "error": "#ffb4ab",
+            "surface-tint": "#ffb1c1",
+            "on-primary-container": "#5a0024",
+            "inverse-on-surface": "#303038",
+            "surface-container-low": "#1b1b23",
+            "on-surface-variant": "#e2bdc3",
+            "surface": "#13131a",
+            "on-tertiary-container": "#340080",
+            "on-primary": "#66002a",
+            "outline": "#aa888e",
+            "tertiary-fixed-dim": "#d0bcff",
+            "on-surface": "#e4e1ec",
+            "outline-variant": "#5a4045",
+            "primary-fixed-dim": "#ffb1c1",
+            "on-error": "#690005",
+            "secondary-fixed-dim": "#ffb68d",
+            "inverse-primary": "#bb0053",
+            "primary": "#ffb1c1",
+            "surface-variant": "#34343d",
+            "tertiary": "#d0bcff",
+            "tertiary-container": "#a078ff",
+            "inverse-surface": "#e4e1ec",
+            "surface-container-high": "#292932",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed-variant": "#763300",
+            "on-primary-fixed": "#3f0017",
+            "surface-container-highest": "#34343d",
+            "surface-container-lowest": "#0d0d15",
+            "on-secondary-fixed": "#321200",
+            "on-secondary": "#532200",
+            "background": "#13131a",
+            "on-secondary-container": "#fff7f4",
+            "surface-bright": "#393841",
+            "secondary": "#ffb68d",
+            "on-tertiary": "#3c0091",
+            "error-container": "#93000a",
+            "primary-container": "#ff4c85",
+            "primary-fixed": "#ffd9df",
+            "on-tertiary-fixed": "#23005c",
+            "on-background": "#e4e1ec",
+            "tertiary-fixed": "#e9ddff",
+            "secondary-fixed": "#ffdbc9",
+            "surface-container": "#1f1f27"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "gutter": "0.75rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "sans": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "label-sm": ["Pretendard", "Plus Jakarta Sans"],
+            "headline-sm": ["Pretendard", "Plus Jakarta Sans"],
+            "body-md": ["Pretendard", "Plus Jakarta Sans"],
+            "code-metric": ["Plus Jakarta Sans"],
+            "body-lg": ["Pretendard", "Plus Jakarta Sans"],
+            "body-sm": ["Pretendard", "Plus Jakarta Sans"],
+            "headline-md": ["Pretendard", "Plus Jakarta Sans"],
+            "label-lg": ["Pretendard", "Plus Jakarta Sans"],
+            "label-md": ["Pretendard", "Plus Jakarta Sans"],
+            "display-hero": ["Pretendard", "Plus Jakarta Sans"],
+            "headline-lg": ["Pretendard", "Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "code-metric": ["13px", { "lineHeight": "16px", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "fontWeight": "800" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background-color: #0B0B0F;
+      color: #e4e1ec;
+      overflow-x: hidden;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Ambient Neon Atmospheric Glows */
+    .glow-magenta {
+      background: radial-gradient(circle, rgba(255, 76, 133, 0.22) 0%, rgba(13, 13, 21, 0) 70%);
+    }
+    .glow-violet {
+      background: radial-gradient(circle, rgba(160, 120, 255, 0.18) 0%, rgba(13, 13, 21, 0) 70%);
+    }
+    .kakao-btn-bg {
+      background-color: #FEE500;
+      color: #191919;
+    }
+    .kakao-btn-bg:active {
+      background-color: #e6ce00;
+      transform: scale(0.98);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-white relative">
+<!-- Ambient Cinematic Studio Lighting Background Elements -->
+<div class="fixed top-[-10%] left-[-20%] w-[120%] h-[442px] glow-magenta pointer-events-none blur-3xl z-0"></div>
+<div class="fixed bottom-[-10%] right-[-20%] w-[120%] h-[442px] glow-violet pointer-events-none blur-3xl z-0"></div>
+<!-- Subtle Dynamic Video Mesh Grain Overlay -->
+<div class="fixed inset-0 opacity-[0.03] pointer-events-none z-0" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Main Viewport Container (Centered Mobile Framework) -->
+<main class="relative z-10 w-full max-w-md mx-auto min-h-screen flex flex-col justify-between px-6 py-8 sm:px-8">
+<!-- Top Bar Auxiliary Actions (Language / Help) -->
+<header class="w-full flex justify-between items-center pt-2">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-high/60 border border-outline-variant/30 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container mr-1.5 animate-pulse"></span>
+          AI 2.0 Engine Live
+        </span>
+</div>
+<button aria-label="고객지원 문의" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container/60 border border-outline-variant/30 text-on-surface-variant hover:text-on-surface transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+</button>
+</header>
+<!-- Center Hero Section: Brand Identity & Subtitle -->
+<div class="flex flex-col items-center text-center my-auto py-8">
+<!-- Brand Icon Mark with Atmospheric Drop-Glow -->
+<div class="relative mb-6">
+<div class="absolute -inset-2 bg-gradient-to-r from-primary-container to-tertiary-container rounded-2xl blur-xl opacity-60 animate-pulse"></div>
+<div class="relative w-20 h-20 rounded-2xl bg-surface-container-high border border-outline-variant/50 flex items-center justify-center shadow-2xl backdrop-blur-xl">
+<span class="material-symbols-outlined text-transparent bg-clip-text bg-gradient-to-br from-primary-container via-primary to-secondary text-5xl" data-icon="auto_videocam" style="font-variation-settings: 'FILL' 1;">auto_videocam</span>
+</div>
+</div>
+<!-- Headline & Subtitle -->
+<h1 class="text-headline-lg font-headline-lg font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary-fixed via-primary to-secondary mb-3">
+        ReelMate
+      </h1>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-[280px] leading-relaxed">
+        1분 만에 시작하는 나만의<br/>
+<span class="text-on-surface font-semibold">AI 숏폼 스튜디오</span>
+</p>
+<!-- Visual Feature Highlight Bento Tag -->
+<div class="mt-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container/80 border border-outline-variant/40 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="bolt">bolt</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">릴스 · 숏츠 · 틱톡 원클릭 제작</span>
+</div>
+</div>
+<!-- Sign-In Interactive Container -->
+<div class="w-full flex flex-col gap-3.5 mb-2">
+<!-- 1. Kakao Talk Button -->
+<button class="w-full h-14 rounded-2xl kakao-btn-bg flex items-center justify-center px-5 font-semibold text-[15px] shadow-lg shadow-black/30 transition-all duration-150 active:scale-[0.98] group relative overflow-hidden" type="button">
+<div class="absolute left-5 flex items-center justify-center">
+<svg aria-hidden="true" class="w-6 h-6 fill-current" viewbox="0 0 24 24">
+<path d="M12 3C6.477 3 2 6.478 2 10.771c0 2.784 1.879 5.228 4.747 6.554-.153.535-.989 3.473-1.026 3.69-.046.269.098.266.207.194.143-.095 2.272-1.545 3.197-2.179.61.09 1.238.136 1.875.136 5.523 0 10-3.478 10-7.771C22 6.478 17.523 3 12 3z"></path>
+</svg>
+</div>
+<span class="tracking-tight text-[#191919] font-bold">카카오로 시작하기</span>
+</button>
+<!-- 2. Apple Sign-In Button -->
+<button class="w-full h-14 rounded-2xl bg-white text-black flex items-center justify-center px-5 font-semibold text-[15px] shadow-lg shadow-black/40 transition-all duration-150 hover:bg-neutral-100 active:scale-[0.98] relative group" type="button">
+<div class="absolute left-5 flex items-center justify-center">
+<svg aria-hidden="true" class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.87-.93.04-2.02.63-2.66 1.38-.56.65-.98 1.72-.85 2.76 1.04.08 2.06-.52 2.59-1.27z"></path>
+</svg>
+</div>
+<span class="tracking-tight font-bold text-black">Apple로 계속하기</span>
+</button>
+<!-- 3. Google Sign-In Button -->
+<button class="w-full h-14 rounded-2xl bg-surface-container border border-outline-variant/50 text-on-surface flex items-center justify-center px-5 font-semibold text-[15px] shadow-md shadow-black/40 hover:bg-surface-container-high hover:border-outline-variant transition-all duration-150 active:scale-[0.98] relative group" type="button">
+<div class="absolute left-5 flex items-center justify-center">
+<svg aria-hidden="true" class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" fill="#4285F4"></path>
+<path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z" fill="#34A853"></path>
+<path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" fill="#FBBC05"></path>
+<path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" fill="#EA4335"></path>
+</svg>
+</div>
+<span class="tracking-tight text-white font-medium">Google 계정으로 로그인</span>
+</button>
+<!-- Auxiliary Email Login Option -->
+<div class="pt-3 pb-1 text-center">
+<a class="inline-flex items-center gap-1.5 text-body-sm font-label-md text-on-surface-variant hover:text-primary transition-colors py-1 group" href="#email-login">
+<span>이메일로 로그인하기</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Footer: Terms of Service & Privacy Notice -->
+<footer class="pt-4 pb-2 text-center">
+<p class="text-label-sm font-label-sm text-outline leading-relaxed max-w-xs mx-auto">
+        시작함으로써 <a class="underline underline-offset-2 hover:text-on-surface transition-colors" href="#terms">서비스 이용약관</a> 및 <a class="underline underline-offset-2 hover:text-on-surface transition-colors" href="#privacy">개인정보 처리방침</a>에 동의합니다.
+      </p>
+<div class="mt-4 flex justify-center items-center gap-4 text-label-sm font-label-sm text-outline-variant">
+<span>© 2025 ReelMate Studio</span>
+<span>•</span>
+<button class="hover:text-on-surface-variant transition-colors" type="button">계정 찾기</button>
+</div>
+</footer>
+</main>
+<script>
+    // Lightweight tactile feedback micro-interactions
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('touchstart', function() {
+        this.style.filter = 'brightness(0.95)';
+      });
+      btn.addEventListener('touchend', function() {
+        this.style.filter = '';
+      });
+    });
+  </script>
+<script>window.SCREEN="login"</script><script src="../nav.js" defer></script>
+</body></html>

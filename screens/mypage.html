@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ReelMate - 내 정보</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#e4e1ec",
+            "on-tertiary-fixed": "#23005c",
+            "secondary": "#ffb68d",
+            "surface-container-highest": "#34343d",
+            "primary-fixed-dim": "#ffb1c1",
+            "inverse-on-surface": "#303038",
+            "secondary-container": "#b95502",
+            "inverse-primary": "#bb0053",
+            "surface-container-low": "#1b1b23",
+            "on-error": "#690005",
+            "outline": "#aa888e",
+            "on-secondary-fixed-variant": "#763300",
+            "error": "#ffb4ab",
+            "on-surface-variant": "#e2bdc3",
+            "primary-fixed": "#ffd9df",
+            "on-tertiary-fixed-variant": "#5516be",
+            "on-primary": "#66002a",
+            "surface-tint": "#ffb1c1",
+            "tertiary-container": "#a078ff",
+            "on-tertiary": "#3c0091",
+            "surface-container-lowest": "#0d0d15",
+            "primary-container": "#ff4c85",
+            "on-primary-fixed-variant": "#90003e",
+            "on-background": "#e4e1ec",
+            "on-secondary-container": "#fff7f4",
+            "secondary-fixed": "#ffdbc9",
+            "tertiary-fixed-dim": "#d0bcff",
+            "background": "#13131a",
+            "tertiary": "#d0bcff",
+            "surface-container-high": "#292932",
+            "surface-dim": "#13131a",
+            "on-error-container": "#ffdad6",
+            "tertiary-fixed": "#e9ddff",
+            "surface-variant": "#34343d",
+            "on-secondary": "#532200",
+            "surface": "#13131a",
+            "surface-bright": "#393841",
+            "secondary-fixed-dim": "#ffb68d",
+            "outline-variant": "#5a4045",
+            "on-primary-container": "#5a0024",
+            "on-primary-fixed": "#3f0017",
+            "primary": "#ffb1c1",
+            "error-container": "#93000a",
+            "on-tertiary-container": "#340080",
+            "on-secondary-fixed": "#321200",
+            "surface-container": "#1f1f27",
+            "inverse-surface": "#e4e1ec"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "body-sm": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "code-metric": ["Plus Jakarta Sans", "monospace"],
+            "body-md": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "label-md": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "label-lg": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "label-sm": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "body-lg": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+            "display-hero": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "code-metric": ["13px", { "lineHeight": "16px", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "fontWeight": "800" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: #0B0B0F;
+      color: #e4e1ec;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .neon-glow-pink {
+      box-shadow: 0 0 24px rgba(255, 76, 133, 0.35), 0 0 45px rgba(255, 182, 141, 0.15);
+    }
+    .neon-pill-gradient {
+      background: linear-gradient(135deg, #ff4c85 0%, #ff8a3d 100%);
+    }
+    .neon-border-gradient {
+      border: 1px solid rgba(255, 76, 133, 0.35);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest min-h-screen text-on-surface antialiased pb-32">
+<!-- TopAppBar Component (Docked Full Width) -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 h-14 w-full bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center space-x-2">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">내 정보</span>
+</div>
+<div class="flex items-center space-x-1">
+<button class="relative p-2 rounded-full hover:bg-surface-container-high/60 transition-colors active:scale-95 duration-150 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<!-- Notification Red Indicator Badge -->
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-container ring-2 ring-surface"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high/60 transition-colors active:scale-95 duration-150 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="max-w-lg mx-auto pt-16 px-4 space-y-5">
+<!-- 2. User Profile Card -->
+<section class="relative mt-2 p-5 rounded-DEFAULT bg-surface-container-low border border-outline-variant/30 shadow-xl overflow-hidden">
+<!-- Ambient Glow Behind Avatar -->
+<div class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-primary-container/10 blur-3xl pointer-events-none"></div>
+<div class="flex items-center space-x-4">
+<!-- Avatar with Neon Ring Border -->
+<div class="relative shrink-0">
+<div class="w-18 h-18 p-[2.5px] rounded-full neon-pill-gradient shadow-lg">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A cinematic studio portrait of an Asian digital video creator woman with creative lighting, neon magenta and soft amber reflections in a dark aesthetic studio room with ultra crisp depth of field and contemporary editorial styling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6LwZeg_fqtjeBMHvugRDmL29-kuCnnEe3_5d5bulIS6Je-7W2u_Tk7h6VxNxk1uhn7iKD0mHT6r4XJfa3o29G5mI1efAkUcxR_FhfEabO3J3yYy4MWuL6azK1wDRLcNon2Dr_5BU1w6ROBj92wNF4oQO_kWoO9yrhUAeW2t9AOlxzACVS8L7wt0qP7Plp9lGssIlf28f8OWkpzs9e5zSHpjYzvWxQ4UKARvlpmHQ"/>
+</div>
+</div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-surface-container-lowest flex items-center justify-center p-0.5">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<!-- Name & Badges -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-1.5 mb-1">
+<h1 class="text-headline-sm font-headline-sm font-bold text-on-surface truncate">이지민 크리에이터</h1>
+</div>
+<p class="text-body-sm font-body-sm text-outline mb-2 truncate">jimin.creator@studio.com</p>
+<div class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-primary-container/15 border border-primary-container/40 text-primary-fixed">
+<span class="text-label-sm font-label-sm font-semibold tracking-wide">PRO 회원 (연간 구독 중) ✨</span>
+</div>
+</div>
+</div>
+<!-- Creator Stats Strip -->
+<div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-outline-variant/30">
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant">제작한 영상</span>
+<span class="text-headline-sm font-headline-sm font-extrabold text-on-surface mt-0.5">64<span class="text-label-sm font-label-sm font-normal text-outline">개</span></span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant">누적 조회수</span>
+<span class="text-headline-sm font-headline-sm font-extrabold text-secondary mt-0.5">42.8<span class="text-label-sm font-label-sm font-normal text-outline">만</span></span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant">연동 채널</span>
+<span class="text-headline-sm font-headline-sm font-extrabold text-on-surface mt-0.5">3<span class="text-label-sm font-label-sm font-normal text-outline">개</span></span>
+</div>
+</div>
+</section>
+<!-- 3. Plan & Usage Progress Bar Card -->
+<section class="p-4 rounded-DEFAULT bg-surface-container-low border border-outline-variant/30 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="text-label-lg font-label-lg text-on-surface">이번 달 AI 렌더링 사용량</h2>
+</div>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary border border-secondary-container/40">VIP 전용 엔진</span>
+</div>
+<!-- AI Rendering Limit Progress -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">무제한 플랜 이용 중</span>
+<span class="font-code-metric text-code-metric text-primary font-bold">128 / ∞</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden p-0.5">
+<div class="h-full rounded-full neon-pill-gradient w-[72%] shadow-[0_0_12px_rgba(255,76,133,0.5)]"></div>
+</div>
+</div>
+<!-- Cloud Storage Limit Progress -->
+<div class="space-y-1.5 pt-1">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">클라우드 고속 용량</span>
+<span class="font-code-metric text-code-metric text-on-surface font-semibold">4.2GB <span class="text-outline font-normal">/ 50GB</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full rounded-full bg-tertiary-container w-[14%]"></div>
+</div>
+</div>
+<!-- Subscription Action Button -->
+<button class="w-full mt-2 py-2.5 px-4 rounded-full bg-surface-container border border-outline-variant/40 hover:bg-surface-container-high transition-colors active:scale-95 duration-150 flex items-center justify-center space-x-1.5 group">
+<span class="text-label-md font-label-md text-on-surface font-semibold group-hover:text-primary transition-colors">구독 관리 및 결제 내역</span>
+<span class="material-symbols-outlined text-[16px] text-primary">arrow_outward</span>
+</button>
+</section>
+<!-- 4. Account & Channel Management Section -->
+<section class="space-y-2.5">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-label-lg font-label-lg font-bold text-on-surface">연동된 SNS 계정 관리</h2>
+<span class="text-label-sm font-label-sm text-outline">실시간 자동 배포 연동</span>
+</div>
+<div class="space-y-2">
+<!-- Instagram Item -->
+<div class="flex items-center justify-between p-3.5 rounded-DEFAULT bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center p-0.5">
+<div class="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] text-primary">photo_camera</span>
+</div>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Instagram</p>
+<p class="text-body-sm font-body-sm text-outline">@creator_studio.kr</p>
+</div>
+</div>
+<div class="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-surface-container text-primary-fixed border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-label-sm font-label-sm font-medium">연결됨 (정상)</span>
+</div>
+</div>
+<!-- YouTube Shorts Item -->
+<div class="flex items-center justify-between p-3.5 rounded-DEFAULT bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] text-error" style="font-variation-settings: 'FILL' 1;">smart_display</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">YouTube Shorts</p>
+<p class="text-body-sm font-body-sm text-outline">크리에이터 지민</p>
+</div>
+</div>
+<div class="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-surface-container text-primary-fixed border border-primary-container/20">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-label-sm font-label-sm font-medium">연결됨 (정상)</span>
+</div>
+</div>
+<!-- Facebook Page Item (Disconnected) -->
+<div class="flex items-center justify-between p-3.5 rounded-DEFAULT bg-surface-container-low/60 border border-dashed border-outline-variant/40">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] text-outline">public</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Facebook Page</p>
+<p class="text-body-sm font-body-sm text-outline">미연결</p>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/50 text-on-surface text-label-sm font-label-sm font-semibold hover:border-primary-container transition-colors active:scale-95 duration-150">
+            + 계정 연결
+          </button>
+</div>
+</div>
+</section>
+<!-- 5. Video Production Defaults Section -->
+<section class="space-y-2.5">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-label-lg font-label-lg font-bold text-on-surface">AI 제작 기본 설정</h2>
+<span class="text-label-sm font-label-sm text-primary">스마트 프리셋</span>
+</div>
+<div class="p-4 rounded-DEFAULT bg-surface-container-low border border-outline-variant/30 space-y-4">
+<!-- Default Mood Picker -->
+<div class="flex items-center justify-between cursor-pointer py-1">
+<div class="flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-secondary text-[20px]">palette</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">기본 무드 프리셋</p>
+<p class="text-body-sm font-body-sm text-outline">영상 생성 시 자동 적용</p>
+</div>
+</div>
+<div class="flex items-center space-x-1 text-primary">
+<span class="text-label-md font-label-md font-bold">감성 &amp; 브이로그</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</div>
+</div>
+<div class="h-px bg-outline-variant/20 w-full"></div>
+<!-- Caption Font Picker -->
+<div class="flex items-center justify-between cursor-pointer py-1">
+<div class="flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-tertiary text-[20px]">match_case</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">기본 자막 폰트</p>
+<p class="text-body-sm font-body-sm text-outline">음성 인식 자막에 반영</p>
+</div>
+</div>
+<div class="flex items-center space-x-1 text-on-surface-variant">
+<span class="text-label-md font-label-md">Pretendard 볼드 (기본)</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</div>
+</div>
+<div class="h-px bg-outline-variant/20 w-full"></div>
+<!-- My Logo Watermark Toggle & Upload Thumbnail -->
+<div class="space-y-3 pt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-primary-container text-[20px]">branding_watermark</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">개인 로고 워터마크 자동 삽입</p>
+<p class="text-body-sm font-body-sm text-outline">영상 우상단 투명도 85%</p>
+</div>
+</div>
+<!-- Custom Styled Toggle Switch (ON state) -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-primary-container peer-checked:to-secondary shadow-inner"></div>
+</label>
+</div>
+<!-- Uploaded Watermark Thumbnail Bar -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container border border-outline-variant/30">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-md bg-surface-container-highest border border-outline-variant/40 flex items-center justify-center p-1">
+<span class="text-label-sm font-label-sm font-extrabold text-primary">JM</span>
+</div>
+<div class="truncate max-w-[150px]">
+<p class="text-label-sm font-label-sm font-semibold text-on-surface truncate">JM_logo_white.png</p>
+<p class="text-body-sm font-body-sm text-outline">240 x 80 px (투명 PNG)</p>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded-md bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-label-sm font-label-sm font-medium transition-colors border border-outline-variant/30">
+              워터마크 변경
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. App Preferences & Support -->
+<section class="space-y-2.5">
+<div class="px-1">
+<h2 class="text-label-lg font-label-lg font-bold text-on-surface">앱 환경설정 및 고객지원</h2>
+</div>
+<div class="rounded-DEFAULT bg-surface-container-low border border-outline-variant/30 divide-y divide-outline-variant/20 overflow-hidden">
+<!-- Notification Toggle 1 -->
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-[20px] text-outline">notifications_active</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">발행 완료 알림</p>
+<p class="text-body-sm font-body-sm text-outline">AI 렌더링 및 예약 발행 성공 시 푸시</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5.5 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-primary-container peer-checked:to-secondary"></div>
+</label>
+</div>
+<!-- Notification Toggle 2 -->
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-[20px] text-outline">trending_up</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">트렌드 및 챌린지 추천 알림</p>
+<p class="text-body-sm font-body-sm text-outline">주간 급상승 릴스 오디오 정보 수신</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5.5 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-primary-container peer-checked:to-secondary"></div>
+</label>
+</div>
+<!-- Dark Mode Indicator -->
+<div class="p-3.5 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-[20px] text-outline">dark_mode</span>
+<p class="text-label-md font-label-md text-on-surface">화면 테마</p>
+</div>
+<span class="text-label-sm font-label-sm font-medium px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">다크 모드 고정</span>
+</div>
+<!-- FAQ and Customer Support Link -->
+<a class="p-3.5 flex items-center justify-between hover:bg-surface-container/50 transition-colors block" href="#support">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-[20px] text-outline">support_agent</span>
+<span class="text-label-md font-label-md text-on-surface">고객센터 및 피드백</span>
+</div>
+<div class="flex items-center space-x-1 text-outline">
+<span class="text-label-sm font-label-sm">문의하기</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</div>
+</a>
+</div>
+</section>
+<!-- 7. Footer -->
+<footer class="pt-4 pb-8 flex flex-col items-center justify-center space-y-2 text-center">
+<button class="text-label-md font-label-md text-error hover:text-error/80 transition-colors py-1 px-3 rounded-full hover:bg-error-container/20">
+        로그아웃
+      </button>
+<p class="text-body-sm font-body-sm text-outline/70">버전 정보 v2.4.0 (최신 버전)</p>
+<p class="text-label-sm font-label-sm text-outline-variant/60 tracking-wider">ReelMate Creator Studio</p>
+</footer>
+</main>
+<!-- 8. Fixed BottomNavBar Component (JSON Anchor Faithful Execution) -->
+<!-- 5 destinations: ["홈", "보관함", "생성", "예약", "내 정보"] with "내 정보" ACTIVE -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-2 py-2 max-w-lg mx-auto bg-surface-container-low/90 dark:bg-surface-container-low/90 backdrop-blur-xl rounded-full mx-4 mb-4 border border-outline-variant/40 shadow-2xl shadow-surface-container-lowest/80">
+<!-- Tab 1: 홈 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 py-1 hover:text-on-surface dark:hover:text-on-surface transition-colors active:scale-95 duration-150 flex-1" href="#home">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">홈</span>
+</a>
+<!-- Tab 2: 보관함 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 py-1 hover:text-on-surface dark:hover:text-on-surface transition-colors active:scale-95 duration-150 flex-1" href="#library">
+<span class="material-symbols-outlined text-[22px]">video_library</span>
+<span class="text-label-sm font-label-sm mt-0.5">보관함</span>
+</a>
+<!-- Tab 3: 생성 (Center Button / Floating burst trigger) -->
+<div class="relative -top-4 flex flex-col items-center justify-center px-1">
+<button class="w-13 h-13 w-[52px] h-[52px] rounded-full neon-pill-gradient flex items-center justify-center text-on-primary-container shadow-lg neon-glow-pink active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined text-[28px] text-white" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<span class="text-label-sm font-label-sm text-on-surface-variant/80 mt-1 font-semibold">생성</span>
+</div>
+<!-- Tab 4: 예약 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 py-1 hover:text-on-surface dark:hover:text-on-surface transition-colors active:scale-95 duration-150 flex-1" href="#schedule">
+<span class="material-symbols-outlined text-[22px]">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-0.5">예약</span>
+</a>
+<!-- Tab 5: 내 정보 (ACTIVE - Semantic Exact Match) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary font-semibold py-1 hover:text-on-surface dark:hover:text-on-surface transition-colors active:scale-95 duration-150 flex-1 relative" href="#profile">
+<div class="relative flex flex-col items-center">
+<!-- Pink/Orange Glow Indicator on Active -->
+<span class="material-symbols-outlined text-[22px] drop-shadow-[0_0_8px_rgba(255,76,133,0.8)]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-label-sm font-label-sm mt-0.5 font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-container to-secondary">내 정보</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_6px_#ff4c85]"></span>
+</div>
+</a>
+</nav>
+<script>window.SCREEN="mypage"</script><script src="../nav.js" defer></script>
+</body></html>

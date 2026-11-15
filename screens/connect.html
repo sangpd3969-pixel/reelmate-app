@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>계정 연동 - ReelMate</title>
+<!-- Pretendard Font & Plus Jakarta Sans Fallback -->
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#90003e",
+            "surface-dim": "#13131a",
+            "on-tertiary-fixed-variant": "#5516be",
+            "secondary-container": "#b95502",
+            "error": "#ffb4ab",
+            "surface-tint": "#ffb1c1",
+            "on-primary-container": "#5a0024",
+            "inverse-on-surface": "#303038",
+            "surface-container-low": "#1b1b23",
+            "on-surface-variant": "#e2bdc3",
+            "surface": "#13131a",
+            "on-tertiary-container": "#340080",
+            "on-primary": "#66002a",
+            "outline": "#aa888e",
+            "tertiary-fixed-dim": "#d0bcff",
+            "on-surface": "#e4e1ec",
+            "outline-variant": "#5a4045",
+            "primary-fixed-dim": "#ffb1c1",
+            "on-error": "#690005",
+            "secondary-fixed-dim": "#ffb68d",
+            "inverse-primary": "#bb0053",
+            "primary": "#ffb1c1",
+            "surface-variant": "#34343d",
+            "tertiary": "#d0bcff",
+            "tertiary-container": "#a078ff",
+            "inverse-surface": "#e4e1ec",
+            "surface-container-high": "#292932",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed-variant": "#763300",
+            "on-primary-fixed": "#3f0017",
+            "surface-container-highest": "#34343d",
+            "surface-container-lowest": "#0d0d15",
+            "on-secondary-fixed": "#321200",
+            "on-secondary": "#532200",
+            "background": "#13131a",
+            "on-secondary-container": "#fff7f4",
+            "surface-bright": "#393841",
+            "secondary": "#ffb68d",
+            "on-tertiary": "#3c0091",
+            "error-container": "#93000a",
+            "primary-container": "#ff4c85",
+            "primary-fixed": "#ffd9df",
+            "on-tertiary-fixed": "#23005c",
+            "on-background": "#e4e1ec",
+            "tertiary-fixed": "#e9ddff",
+            "secondary-fixed": "#ffdbc9",
+            "surface-container": "#1f1f27"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "gutter": "0.75rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "code-metric": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "label-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "display-hero": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "code-metric": ["13px", { "lineHeight": "16px", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "fontWeight": "800" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background-color: #0B0B0F;
+      color: #e4e1ec;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-gradient-btn {
+      background: linear-gradient(135deg, #FF3D7F 0%, #FF8A3D 100%);
+      box-shadow: 0 4px 20px rgba(255, 61, 127, 0.35);
+    }
+    .custom-gradient-border {
+      position: relative;
+      background: #181820;
+      border: 1px solid transparent;
+      background-clip: padding-box;
+    }
+    .custom-gradient-border::after {
+      position: absolute;
+      top: -1px; bottom: -1px; left: -1px; right: -1px;
+      background: linear-gradient(135deg, #FF3D7F, #FF8A3D);
+      content: '';
+      z-index: -1;
+      border-radius: inherit;
+    }
+    .ambient-glow {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(255, 76, 133, 0.12) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-white relative overflow-x-hidden">
+<!-- Subtle Atmospheric Neon Glow Behind Header -->
+<div class="ambient-glow"></div>
+<!-- Mobile Viewport Container (Centering for tablet/desktop preview) -->
+<div class="w-full max-w-md mx-auto min-h-screen flex flex-col justify-between relative z-10">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest/80 backdrop-blur-md px-4 h-14 flex items-center justify-between">
+<button aria-label="뒤로가기" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-high/60 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">계정 연동</h1>
+<div class="w-10 flex justify-end">
+<button aria-label="도움말" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-4 pt-4 pb-6 flex flex-col">
+<!-- Header Section -->
+<section class="mb-7 mt-1">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container border border-outline-variant/30 mb-3">
+<span class="material-symbols-outlined text-primary text-[15px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-label-sm text-primary font-medium tracking-wide">원클릭 멀티 채널 배포</span>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface mb-2">
+          SNS 채널을 연결하세요
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          완성된 릴스와 쇼츠를 원클릭으로 각 플랫폼에 바로 업로드하고 예약 발행할 수 있습니다.
+        </p>
+</section>
+<!-- Connection Cards Container -->
+<div class="space-y-3.5 flex-1">
+<!-- 1. Instagram Card -->
+<article class="bg-[#181820] border border-[#2A2A38] rounded-2xl p-4 transition-all duration-200 hover:border-outline-variant/60 shadow-lg shadow-black/40">
+<div class="flex items-start justify-between gap-3">
+<!-- Left Info Cluster -->
+<div class="flex items-center gap-3.5">
+<!-- Instagram Icon Box -->
+<div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] shadow-sm shadow-[#ee2a7b]/20">
+<span class="material-symbols-outlined text-white text-[24px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Instagram</h3>
+<!-- Connected Status Chip -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+                    연결됨
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">릴스 자동 발행 및 스토리 연동</p>
+</div>
+</div>
+</div>
+<!-- Bottom Meta & Action Area -->
+<div class="mt-3.5 pt-3 border-t border-[#2A2A38]/70 flex items-center justify-between">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="text-on-surface-variant font-medium">@creator_studio.kr</span>
+</div>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container border border-[#2A2A38] text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 flex items-center gap-1.5" type="button">
+<span>연결 관리</span>
+<span class="material-symbols-outlined text-[14px]">tune</span>
+</button>
+</div>
+</article>
+<!-- 2. Facebook Page Card -->
+<article class="bg-[#181820] border border-[#2A2A38] rounded-2xl p-4 transition-all duration-200 hover:border-outline-variant/60 shadow-lg shadow-black/40">
+<div class="flex items-start justify-between gap-3">
+<!-- Left Info Cluster -->
+<div class="flex items-center gap-3.5">
+<!-- Facebook Blue Icon Box -->
+<div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#1877F2] shadow-sm shadow-[#1877F2]/25">
+<span class="material-symbols-outlined text-white text-[26px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Facebook 페이지</h3>
+<!-- Disconnected Status Chip -->
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm">
+                    미연결
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">스토리 및 피드 비디오 공유</p>
+</div>
+</div>
+</div>
+<!-- Bottom Action Area -->
+<div class="mt-3.5 pt-3 border-t border-[#2A2A38]/70 flex items-center justify-between">
+<span class="text-on-surface-variant/70 font-label-sm text-label-sm">페이지 관리자 권한 필요</span>
+<!-- Gradient Outline Trigger -->
+<button class="relative group p-[1px] rounded-full transition-transform active:scale-95" type="button">
+<span class="absolute inset-0 rounded-full bg-gradient-to-r from-[#FF3D7F] to-[#FF8A3D] opacity-80 group-hover:opacity-100 transition-opacity"></span>
+<span class="relative px-3.5 py-1.5 rounded-full bg-[#181820] group-hover:bg-[#20202b] flex items-center gap-1 font-label-md text-label-md font-semibold text-white transition-colors">
+<span class="material-symbols-outlined text-[16px] text-primary">add</span>
+<span>연결하기</span>
+</span>
+</button>
+</div>
+</article>
+<!-- 3. YouTube Card -->
+<article class="bg-[#181820] border border-[#2A2A38] rounded-2xl p-4 transition-all duration-200 hover:border-outline-variant/60 shadow-lg shadow-black/40">
+<div class="flex items-start justify-between gap-3">
+<!-- Left Info Cluster -->
+<div class="flex items-center gap-3.5">
+<!-- YouTube Red Play Icon Box -->
+<div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#FF0000] shadow-sm shadow-[#FF0000]/25">
+<span class="material-symbols-outlined text-white text-[26px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">YouTube</h3>
+<!-- Disconnected Status Chip -->
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm">
+                    미연결
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">YouTube Shorts 원클릭 즉시 게시</p>
+</div>
+</div>
+</div>
+<!-- Bottom Action Area -->
+<div class="mt-3.5 pt-3 border-t border-[#2A2A38]/70 flex items-center justify-between">
+<span class="text-on-surface-variant/70 font-label-sm text-label-sm">구글 브랜드 채널 지원</span>
+<!-- Solid Gradient Fill Button -->
+<button class="custom-gradient-btn px-4 py-1.5 rounded-full text-white font-label-md text-label-md font-bold flex items-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>연결하기</span>
+</button>
+</div>
+</article>
+<!-- Security & Privacy Guarantee Note -->
+<div class="bg-surface-container-low/70 border border-outline-variant/20 rounded-xl p-3 flex items-start gap-2.5 mt-4">
+<span class="material-symbols-outlined text-secondary text-[18px] mt-0.5 flex-shrink-0">verified_user</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            ReelMate는 공식 API 인증을 통해서만 안전하게 연동되며, 계정 비밀번호나 개인정보는 절대 저장되지 않습니다.
+          </p>
+</div>
+</div>
+<!-- Bottom Button Area -->
+<footer class="mt-8 pt-4 pb-2 space-y-2.5">
+<!-- Big Primary AI Action Button -->
+<button class="w-full py-4 rounded-full custom-gradient-btn text-white font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all" type="button">
+<span>다음 단계로</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<!-- Skip Link -->
+<button class="w-full py-2.5 text-center font-label-md text-label-md text-on-surface-variant/80 hover:text-on-surface active:opacity-75 transition-colors" type="button">
+          나중에 하기
+        </button>
+</footer>
+</main>
+</div>
+<script>
+    // Lightweight tactile click ripple and status interaction
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('touchstart', function() {}, {passive: true});
+    });
+  </script>
+<script>window.SCREEN="connect"</script><script src="../nav.js" defer></script>
+</body></html>

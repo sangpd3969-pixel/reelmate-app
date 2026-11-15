@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReelMate</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0B0B0F">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ReelMate">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<style>body{margin:0;background:#0B0B0F;color:#fff;font-family:-apple-system,"Malgun Gothic",sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px}
+a{color:#fff;background:linear-gradient(135deg,#FF3D7F,#FF8A3D);padding:14px 28px;border-radius:999px;text-decoration:none;font-weight:700}</style>
+</head><body>
+<img src="icons/icon-192.png" width="96" height="96" style="border-radius:22px" alt="">
+<a href="screens/onboarding.html">ReelMate 시작하기</a>
+<script>
+try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js"); } catch (e) {}
+setTimeout(function(){ location.replace("screens/onboarding.html"); }, 600);
+</script>
+</body></html>
