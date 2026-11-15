@@ -1,32 +1,41 @@
-// ReelMate 프로토타입: Stitch 화면들을 버튼 문구로 서로 연결하고, 실제 사진 선택·미리보기를 붙인다.
+// ReelMate: Stitch 화면 연결 + 휴대폰 저장 + 휴대폰에서 영상 만들기 (reel.js 사용)
 (function () {
   try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { scope: "../" }); } catch (e) {}
-  var S = window.SCREEN;
+  var S = window.SCREEN, R = window.Reel, St = R.Store;
   var go = function (to) { location.href = to + ".html"; };
-  var store = {
-    get: function (k) { try { return JSON.parse(sessionStorage.getItem(k) || "null"); } catch (e) { return null; } },
-    set: function (k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
-  };
+  var qs = function (k) { return new URLSearchParams(location.search).get(k); };
+  function textOf(el) { return (el.innerText || el.textContent || "").replace(/\s+/g, " ").trim(); }
+  function toast(msg) {
+    var d = document.createElement("div");
+    d.textContent = msg;
+    d.style.cssText = "position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:9999;background:rgba(24,24,32,.95);color:#fff;padding:12px 18px;border-radius:999px;font:600 14px sans-serif;border:1px solid #2E2E3E;max-width:86%;text-align:center";
+    document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2600);
+  }
+  function pill(label, onClick, bottom) {
+    var b = document.createElement("button");
+    b.textContent = label;
+    b.style.cssText = "position:fixed;right:16px;bottom:" + (bottom || 96) + "px;z-index:9998;padding:12px 18px;border-radius:999px;border:0;color:#fff;font:700 14px sans-serif;background:linear-gradient(135deg,#FF3D7F,#FF8A3D);box-shadow:0 8px 24px rgba(255,61,127,.35)";
+    b.onclick = function (e) { e.stopPropagation(); e.preventDefault(); onClick(); };
+    document.body.appendChild(b); return b;
+  }
 
-  // [화면, 버튼 문구에 포함된 글자, 이동할 화면]  (위에서부터 먼저 맞는 것 적용, "=" = 모든 화면에서 문구가 정확히 같을 때)
+  // [화면, 버튼 문구, 이동할 화면]  "=" = 모든 화면에서 문구가 정확히 같을 때
   var RULES = [
     ["onboarding", "시작하기", "login"], ["onboarding", "건너뛰기", "login"], ["onboarding", "로그인", "login"],
     ["login", "카카오", "connect"], ["login", "Apple", "connect"], ["login", "Google", "connect"], ["login", "이메일", "connect"],
     ["connect", "다음 단계로", "home"], ["connect", "나중에 하기", "home"],
     ["home", "지금 만들기", "capture"], ["home", "릴스 만들기", "capture"],
-    ["capture", "다음", "mood"], ["capture", "close", "home"],
+    ["capture", "다음", "NEXT_CAPTURE"], ["capture", "close", "home"],
     ["mood", "다음", "creating"], ["mood", "chevron_left", "capture"], ["mood", "close", "home"],
     ["creating", "백그라운드", "home"], ["creating", "close", "home"],
-    ["preview", "다음", "publish"], ["preview", "다시 만들기", "creating"], ["preview", "arrow_back", "mood"],
-    ["publish", "지금 올리기", "done"], ["publish", "예약하기", "schedule"], ["publish", "arrow_back", "preview"], ["publish", "close", "home"],
+    ["preview", "다음", "PUBLISH"], ["preview", "다시 만들기", "REMAKE"], ["preview", "arrow_back", "mood"],
+    ["publish", "지금 올리기", "done"], ["publish", "예약하기", "schedule"], ["publish", "arrow_back", "BACK"], ["publish", "close", "home"],
     ["done", "하나 더 만들기", "capture"], ["done", "게시물 보기", "library"], ["done", "close", "home"],
     ["schedule", "새 예약 추가", "capture"],
     ["mypage", "로그아웃", "onboarding"],
     ["=", "home 홈", "home"], ["=", "video_library 보관함", "library"], ["=", "calendar_today 예약", "schedule"],
     ["=", "person 내 정보", "mypage"], ["=", "add", "capture"], ["=", "arrow_back", "BACK"]
   ];
-
-  function textOf(el) { return (el.innerText || el.textContent || "").replace(/\s+/g, " ").trim(); }
   function match(text) {
     for (var i = 0; i < RULES.length; i++) {
       var r = RULES[i];
@@ -35,91 +44,156 @@
     return null;
   }
 
-  // ---- 사진 선택 (촬영 화면) ----
+  // ---------- 촬영/선택: 고른 사진을 휴대폰 저장소에 ----------
   function pickPhotos() {
     var inp = document.createElement("input");
     inp.type = "file"; inp.accept = "image/*"; inp.multiple = true;
     inp.onchange = function () {
       var files = Array.prototype.slice.call(inp.files || [], 0, 10);
-      var out = [], left = files.length;
-      if (!left) return;
-      files.forEach(function (f, idx) {
-        var img = new Image();
-        img.onload = function () {
-          var w = 720, h = Math.round(img.height * 720 / img.width);
-          var c = document.createElement("canvas"); c.width = w; c.height = h;
-          c.getContext("2d").drawImage(img, 0, 0, w, h);
-          out[idx] = c.toDataURL("image/jpeg", 0.75);
-          URL.revokeObjectURL(img.src);
-          if (--left === 0) {
-            store.set("photos", out);
-            showPicked(out);
-          }
-        };
-        img.src = URL.createObjectURL(f);
+      if (!files.length) return;
+      Promise.all(files.map(function (f) {
+        return new Promise(function (res) {
+          var img = new Image();
+          img.onload = function () {
+            var w = Math.min(1080, img.width), h = Math.round(img.height * w / img.width);
+            var c = document.createElement("canvas"); c.width = w; c.height = h;
+            c.getContext("2d").drawImage(img, 0, 0, w, h);
+            URL.revokeObjectURL(img.src); res(c.toDataURL("image/jpeg", 0.85));
+          };
+          img.onerror = function () { res(null); };
+          img.src = URL.createObjectURL(f);
+        });
+      })).then(function (out) {
+        out = out.filter(Boolean);
+        return St.set("draftPhotos", out).then(function () { showPicked(out); toast(out.length + "장을 휴대폰에 저장했어요"); });
       });
     };
     inp.click();
   }
   function showPicked(photos) {
-    // 촬영 화면의 썸네일 자리에 고른 사진을 채우고 "다음 (n)" 숫자 갱신
     var thumbs = document.querySelectorAll("img");
     for (var i = 1; i < thumbs.length && i - 1 < photos.length; i++) { thumbs[i].src = photos[i - 1]; thumbs[i].removeAttribute("srcset"); }
     document.querySelectorAll("span").forEach(function (sp) {
-      if (/^다음 \(\d+\)$/.test(textOf(sp))) sp.textContent = "다음 (" + photos.length + ")";
-      else if (/^\d+장 선택됨/.test(textOf(sp))) sp.textContent = textOf(sp).replace(/^\d+/, photos.length);
+      var t = textOf(sp);
+      if (/^다음 \(\d+\)$/.test(t)) sp.textContent = "다음 (" + photos.length + ")";
+      else if (/^\d+장 선택됨/.test(t)) sp.textContent = t.replace(/^\d+/, photos.length);
     });
   }
 
-  // ---- 미리보기: 고른 사진으로 9:16 슬라이드쇼 ----
-  function startSlideshow() {
-    var photos = store.get("photos");
-    if (!photos || !photos.length) return;
-    var box = document.querySelector('section[class*="aspect-[9/16]"] .bg-cover') || document.querySelector(".bg-cover");
-    if (!box) return;
-    var i = 0;
-    var show = function () {
-      box.style.backgroundImage = "url(" + photos[i % photos.length] + ")";
-      box.style.transition = "transform 3s ease-out";
-      box.style.transform = "scale(1.0)";
-      requestAnimationFrame(function () { box.style.transform = "scale(1.12)"; });
-      i++;
-    };
-    show(); setInterval(show, 3000);
+  // ---------- 제작 중: 실제로 영상 만들기 ----------
+  function makeReel(captionsOverride) {
+    var bigNum = null;
+    document.querySelectorAll("span,div,p").forEach(function (el) { if (!bigNum && el.children.length === 0 && /^\d{1,3}$/.test(textOf(el))) bigNum = el; });
+    return Promise.all([St.get("draftPhotos"), St.get("draftMood")]).then(function (r) {
+      var photos = r[0] || [], mood = r[1] || "AI에게 맡기기";
+      if (!photos.length) { toast("먼저 사진을 골라주세요"); setTimeout(function () { go("capture"); }, 1200); return; }
+      var d = new Date(), title = mood.replace("AI에게 맡기기", "오늘의 기록") + " · " + (d.getMonth() + 1) + "월 " + d.getDate() + "일";
+      var caps = captionsOverride || R.captionsFor(mood, photos.length);
+      return R.render(photos, caps, title, function (p) { if (bigNum) bigNum.textContent = Math.round(p * 100); })
+        .then(function (out) {
+          return R.thumbOf(photos[0]).then(function (thumb) {
+            var proj = { id: "p" + Date.now(), createdAt: Date.now(), title: title, mood: mood, captions: caps,
+              photos: photos, thumb: thumb, video: out.blob, mime: out.mime, duration: out.duration };
+            return St.saveProject(proj).then(function () { return St.set("currentId", proj.id); }).then(function () { go("preview"); });
+          });
+        });
+    }).catch(function (e) { toast(e.message || "영상 만들기에 실패했어요"); });
+  }
+
+  // ---------- 미리보기: 만든 영상 재생 + 휴대폰에 저장 ----------
+  function setupPreview() {
+    var id = qs("id");
+    (id ? Promise.resolve(id) : St.get("currentId")).then(function (cid) { return cid ? St.getProject(cid) : null; }).then(function (p) {
+      if (!p) return;
+      St.set("currentId", p.id);
+      var box = document.querySelector('section[class*="aspect-[9/16]"]');
+      if (box) {
+        if (getComputedStyle(box).position === "static") box.style.position = "relative";
+        var v = document.createElement("video");
+        v.src = URL.createObjectURL(p.video); v.autoplay = true; v.loop = true; v.muted = true; v.playsInline = true;
+        v.setAttribute("playsinline", ""); v.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:30;background:#000";
+        box.appendChild(v); v.play().catch(function () {});
+      }
+      var h1 = document.querySelector("h1"); if (h1) h1.textContent = p.title;
+      var inp = document.querySelector("input");
+      if (inp) { inp.value = p.captions.join(" / "); inp.placeholder = "자막을 ' / '로 나눠 고친 뒤 '다시 만들기'"; }
+      pill("📥 휴대폰에 저장", function () { R.exportVideo(p); }, 96);
+    });
+  }
+
+  // ---------- 보관함: 휴대폰에 저장된 릴스 목록 ----------
+  function setupLibrary() {
+    St.allProjects().then(function (list) {
+      var main = document.querySelector("main") || document.body;
+      var sec = document.createElement("section");
+      sec.style.cssText = "margin:12px 0 4px";
+      var h = document.createElement("div");
+      h.style.cssText = "color:#fff;font:700 16px sans-serif;margin:4px 0 10px";
+      h.textContent = "📱 내 휴대폰에 저장된 릴스 (" + list.length + ")";
+      sec.appendChild(h);
+      if (!list.length) {
+        var e = document.createElement("div"); e.style.cssText = "color:#A2A2BA;font:14px sans-serif;padding:8px 0 16px";
+        e.textContent = "아직 만든 릴스가 없어요. 가운데 + 버튼으로 만들어 보세요."; sec.appendChild(e);
+      } else {
+        var g = document.createElement("div"); g.style.cssText = "display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px";
+        list.forEach(function (p) {
+          var a = document.createElement("a"); a.href = "preview.html?id=" + p.id;
+          a.style.cssText = "position:relative;display:block;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:#181820";
+          a.innerHTML = '<img src="' + p.thumb + '" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;left:0;right:0;bottom:0;padding:6px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;font:600 11px sans-serif">' +
+            p.title.replace(/</g, "&lt;") + "</div>";
+          g.appendChild(a);
+        });
+        sec.appendChild(g);
+      }
+      var note = document.createElement("div"); note.style.cssText = "color:#5E5E76;font:12px sans-serif;margin:-6px 0 14px";
+      note.textContent = "아래는 디자인 예시 화면이에요."; sec.appendChild(note);
+      main.insertBefore(sec, main.querySelector("section") || main.firstChild);
+    });
   }
 
   document.addEventListener("click", function (e) {
     var el = e.target.closest("button, a, [role=button]");
-    var cands = [];
-    if (el) cands.push(el);
-    var p = e.target;
-    for (var k = 0; k < 5 && p; k++, p = p.parentElement) cands.push(p);
-    // 촬영 화면: 셔터/앨범 버튼은 실제 사진 고르기
+    if (el && el.getAttribute("href") && el.getAttribute("href").indexOf("preview.html?id=") === 0) return;
+    var cands = []; if (el) cands.push(el);
+    for (var k = 0, p = e.target; k < 5 && p; k++, p = p.parentElement) cands.push(p);
     if (S === "capture") {
       var t0 = textOf(el || e.target);
       if (/photo_library|앨범|photo_camera|auto_fix_high/.test(t0)) { e.preventDefault(); pickPhotos(); return; }
+    }
+    if (S === "mood") {
+      for (var m = 0; m < cands.length; m++) {
+        var tm = textOf(cands[m]);
+        for (var key in R.MOODS) if (tm.indexOf(key) === 0 && tm.length < 60) { St.set("draftMood", key); toast("'" + key + "' 분위기 선택"); break; }
+      }
     }
     for (var j = 0; j < cands.length; j++) {
       var t = textOf(cands[j]);
       if (!t || t.length > 80) continue;
       var to = match(t);
-      if (to) {
-        e.preventDefault();
-        if (to === "BACK") history.back(); else go(to);
-        return;
+      if (!to) continue;
+      e.preventDefault();
+      if (to === "BACK") history.back();
+      else if (to === "NEXT_CAPTURE") St.get("draftPhotos").then(function (ph) { if (ph && ph.length) go("mood"); else { toast("'앨범 전체보기'로 사진을 먼저 골라주세요"); pickPhotos(); } });
+      else if (to === "PUBLISH") St.get("currentId").then(function (id) { location.href = "publish.html" + (id ? "?id=" + id : ""); });
+      else if (to === "REMAKE") {
+        var inp = document.querySelector("input");
+        var caps = inp && inp.value ? inp.value.split("/").map(function (s) { return s.trim(); }) : null;
+        St.set("remakeCaps", caps).then(function () { go("creating"); });
       }
+      else go(to);
+      return;
     }
   }, true);
 
-  // 외부 예시 이미지가 막힌 환경(공유 링크 등)에서는 깨진 아이콘 대신 그라데이션으로 표시
+  // 외부 예시 이미지가 막힌 환경에서는 깨진 아이콘 대신 그라데이션
   var PH = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="700"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1830"/><stop offset="1" stop-color="#3a2216"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>');
-  document.addEventListener("error", function (e) {
-    var t = e.target;
-    if (t && t.tagName === "IMG" && t.src !== PH) { t.removeAttribute("srcset"); t.src = PH; }
-  }, true);
-  document.querySelectorAll("img").forEach(function (im) { if (im.complete && im.naturalWidth === 0 && im.src && im.src.indexOf("data:") !== 0) im.src = PH; });
+  document.addEventListener("error", function (e) { var t = e.target; if (t && t.tagName === "IMG" && t.src !== PH) { t.removeAttribute("srcset"); t.src = PH; } }, true);
 
-  if (S === "capture") { var ph = store.get("photos"); if (ph) showPicked(ph); }
-  if (S === "preview") startSlideshow();
-  if (S === "creating") setTimeout(function () { go("preview"); }, 4000);
+  if (S === "capture") St.get("draftPhotos").then(function (ph) { if (ph && ph.length) showPicked(ph); });
+  if (S === "creating") St.get("remakeCaps").then(function (caps) { St.set("remakeCaps", null); return makeReel(caps || null); });
+  if (S === "preview") setupPreview();
+  if (S === "library") setupLibrary();
+  if (S === "publish") St.get("currentId").then(function (id) { return id && St.getProject(id); }).then(function (p) {
+    if (p) pill("📥 휴대폰에 저장", function () { R.exportVideo(p); }, 150);
+  });
 })();
