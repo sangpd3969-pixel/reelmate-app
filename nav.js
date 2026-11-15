@@ -167,6 +167,19 @@
     }).catch(function (e) { showRetry(e.kind ? e : AiError(e.message || "영상 만들기에 실패했어요", "render")); });
   }
 
+  // 계정 연동 안내: 지금은 공식 연동(개발자 등록) 대신 휴대폰 공유로 올린다
+  function showConnectInfo() {
+    var ov = document.createElement("div");
+    ov.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(11,11,15,.92);display:flex;align-items:flex-end;justify-content:center";
+    ov.innerHTML = '<div style="width:100%;max-width:480px;background:#181820;border-top:1px solid #2E2E3E;border-radius:24px 24px 0 0;padding:24px 20px 32px;color:#fff;font-family:sans-serif">' +
+      '<div style="font:800 18px sans-serif;margin-bottom:10px">계정 연동은 아직 지원하지 않아요</div>' +
+      '<div style="color:#A2A2BA;font-size:14px;line-height:1.6;margin-bottom:16px">인스타그램·페이스북·유튜브 자동 업로드는 각 회사의 개발자 등록이 필요해서 지금은 꺼져 있어요.<br><br>' +
+      '<b style="color:#fff">대신 이렇게 올리세요</b><br>① 릴스를 만든 뒤 <b style="color:#fff">📥 휴대폰에 저장</b>을 누르면 공유 창이 떠요<br>② <b style="color:#fff">인스타그램 / 유튜브 / 페이스북</b> 앱을 고르면 영상이 그 앱으로 넘어가요<br>③ 그 앱에서 음악을 붙이고 게시하면 끝!</div>' +
+      '<button id="rm-ok" style="width:100%;padding:14px;border-radius:999px;border:0;color:#fff;font:800 15px sans-serif;background:linear-gradient(135deg,#FF3D7F,#FF8A3D)">알겠어요</button></div>';
+    document.body.appendChild(ov);
+    ov.querySelector("#rm-ok").onclick = function () { ov.remove(); };
+  }
+
   // 요청 입력칸 (분위기 화면 / 미리보기 화면)
   function requestBox(id, title, hint, value, onInput) {
     var box = document.createElement("div");
@@ -242,6 +255,9 @@
     if (el && el.getAttribute("href") && el.getAttribute("href").indexOf("preview.html?id=") === 0) return;
     var cands = []; if (el) cands.push(el);
     for (var k = 0, p = e.target; k < 5 && p; k++, p = p.parentElement) cands.push(p);
+    if (S === "connect" && el && /연결하기|연결 관리/.test(textOf(el))) {
+      e.preventDefault(); e.stopPropagation(); showConnectInfo(); return;
+    }
     if (S === "capture") {
       var t0 = textOf(el || e.target);
       if (/photo_library|앨범|photo_camera|auto_fix_high/.test(t0)) { e.preventDefault(); pickPhotos(); return; }
