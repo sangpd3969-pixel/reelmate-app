@@ -102,14 +102,16 @@
     return St.get("accessCode").then(function (code) {
       if (!code) throw AiError("AI 접속 코드가 없어요. '내 정보'에서 코드를 넣어주세요.", "code");
       return Promise.all(photos.map(function (p) { return shrink(p, 1000); })).then(function (imgs) {
+        // Apps Script 웹앱: 사전요청(preflight)이 없도록 text/plain으로 보내고, 결과의 status 값으로 판단
         return fetch(CFG.AI_ENDPOINT, {
-          method: "POST", headers: { "Content-Type": "application/json", "X-Access-Code": code },
-          body: JSON.stringify({ images: imgs.filter(Boolean), mood: mood, request: request || "", captions: keepCaps || null })
+          method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ code: code, images: imgs.filter(Boolean), mood: mood, request: request || "", captions: keepCaps || null })
         }).catch(function () { throw AiError("인터넷 연결을 확인해주세요.", "network"); })
           .then(function (r) {
-            return r.json().catch(function () { return {}; }).then(function (j) {
-              if (r.status === 401) throw AiError(j.error || "접속 코드가 맞지 않아요.", "code");
-              if (!r.ok) throw AiError(j.error || "AI 응답 오류 (" + r.status + ")", "server");
+            return r.json().catch(function () { return { status: r.status || 500, error: "AI 서버 응답을 읽지 못했어요" }; }).then(function (j) {
+              var st = j.status || r.status;
+              if (st === 401) throw AiError(j.error || "접속 코드가 맞지 않아요.", "code");
+              if (st !== 200 || !r.ok) throw AiError(j.error || "AI 응답 오류 (" + st + ")", "server");
               if (!j.captions || !j.captions.length) throw AiError("AI가 자막을 만들지 못했어요.", "server");
               return j;
             });

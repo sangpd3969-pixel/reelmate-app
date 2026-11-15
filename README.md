@@ -11,9 +11,10 @@
 - 안드로이드(크롬): 메뉴 ⋮ → "앱 설치" 또는 "홈 화면에 추가"
 - 아이폰(사파리): 공유 버튼 → "홈 화면에 추가"
 
-## AI 자막 (Claude Opus 5.5)
-- `worker/worker.js`: Cloudflare Worker 중계 서버. API 키·접속 코드는 Cloudflare 비밀값으로만 저장 (코드에 없음)
-- `config.js`의 `AI_ENDPOINT`에 Worker 주소를 넣으면 켜짐
+## AI (Claude Opus 5.5)
+- `apps-script/Code.gs`: Google Apps Script 중계 서버 (현재 사용). API 키·접속 코드는 스크립트 속성에만 저장 (코드에 없음)
+- `worker/worker.js`: Cloudflare Worker 버전 (예비)
+- `config.js`의 `AI_ENDPOINT` = 중계 서버 주소
 - 지인은 '내 정보'에서 접속 코드 입력 (또는 링크 끝에 `?code=코드`)
 
 ## 사진 보정·구도 (요청 → AI → 휴대폰에서 적용)
