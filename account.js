@@ -85,9 +85,20 @@
     document.querySelectorAll("a").forEach(function (a) {
       if (/이메일/.test(textOf(a))) { a.querySelector("span").textContent = "로그인 없이 시작하기"; a.setAttribute("href", "#"); a.dataset.rm = "guest"; }
     });
+    var ver = document.createElement("div"); ver.textContent = "ReelMate v9";
+    ver.style.cssText = "text-align:center;color:#555;font:11px sans-serif;padding:6px"; document.body.appendChild(ver);
     if (finishLogin()) toast("로그인 확인 중...", 2000);
+    else St.get("user").then(function (u) {
+      if (!u || u.provider === "guest") return;
+      var bar = document.createElement("div");
+      bar.style.cssText = "position:fixed;left:12px;right:12px;top:12px;z-index:10000;background:#181820;border:1px solid #FF3D7F;border-radius:16px;padding:12px 14px;color:#fff;font:14px sans-serif;display:flex;align-items:center;gap:10px";
+      bar.innerHTML = (u.photo ? '<img src="' + esc(u.photo) + '" referrerpolicy="no-referrer" style="width:32px;height:32px;border-radius:50%">' : "") +
+        '<div style="flex:1"><b>' + esc(u.name) + '</b>님으로 로그인돼 있어요<div style="color:#A2A2BA;font-size:12px">' + (u.provider === "kakao" ? "카카오" : "Google") + ' 계정 · 다른 계정은 아래 버튼으로</div></div>' +
+        '<button id="rm-go" style="padding:8px 14px;border-radius:999px;border:0;color:#fff;font-weight:700;background:linear-gradient(135deg,#FF3D7F,#FF8A3D)">계속</button>';
+      document.body.appendChild(bar);
+      bar.querySelector("#rm-go").onclick = function (e) { e.stopPropagation(); go("home"); };
+    });
   }
-  if (S === "onboarding") St.get("user").then(function (u) { if (u) go("home"); });
 
   window.addEventListener("click", function (e) {
     var el = e.target.closest("button, a, [role=button]"); if (!el) return;
