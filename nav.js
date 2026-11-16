@@ -22,17 +22,16 @@
   // [화면, 버튼 문구, 이동할 화면]  "=" = 모든 화면에서 문구가 정확히 같을 때
   var RULES = [
     ["onboarding", "시작하기", "login"], ["onboarding", "건너뛰기", "login"], ["onboarding", "로그인", "login"],
-    ["login", "카카오", "connect"], ["login", "Apple", "connect"], ["login", "Google", "connect"], ["login", "이메일", "connect"],
     ["connect", "다음 단계로", "home"], ["connect", "나중에 하기", "home"],
     ["home", "지금 만들기", "capture"], ["home", "릴스 만들기", "capture"],
     ["capture", "다음", "NEXT_CAPTURE"], ["capture", "close", "home"],
     ["mood", "다음", "creating"], ["mood", "chevron_left", "capture"], ["mood", "close", "home"],
     ["creating", "백그라운드", "home"], ["creating", "close", "home"],
     ["preview", "다음", "PUBLISH"], ["preview", "다시 만들기", "REMAKE"], ["preview", "arrow_back", "mood"],
-    ["publish", "지금 올리기", "done"], ["publish", "예약하기", "schedule"], ["publish", "arrow_back", "BACK"], ["publish", "close", "home"],
+    ["publish", "예약하기", "schedule"], ["publish", "arrow_back", "BACK"], ["publish", "close", "home"],
     ["done", "하나 더 만들기", "capture"], ["done", "게시물 보기", "library"], ["done", "close", "home"],
     ["schedule", "새 예약 추가", "capture"],
-    ["mypage", "로그아웃", "onboarding"],
+    
     ["=", "home 홈", "home"], ["=", "video_library 보관함", "library"], ["=", "calendar_today 예약", "schedule"],
     ["=", "person 내 정보", "mypage"], ["=", "add", "capture"], ["=", "arrow_back", "BACK"]
   ];
@@ -255,9 +254,6 @@
     if (el && el.getAttribute("href") && el.getAttribute("href").indexOf("preview.html?id=") === 0) return;
     var cands = []; if (el) cands.push(el);
     for (var k = 0, p = e.target; k < 5 && p; k++, p = p.parentElement) cands.push(p);
-    if (S === "connect" && el && /연결하기|연결 관리/.test(textOf(el))) {
-      e.preventDefault(); e.stopPropagation(); showConnectInfo(); return;
-    }
     if (S === "capture") {
       var t0 = textOf(el || e.target);
       if (/photo_library|앨범|photo_camera|auto_fix_high/.test(t0)) { e.preventDefault(); pickPhotos(); return; }
