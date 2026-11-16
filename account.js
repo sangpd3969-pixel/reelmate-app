@@ -85,7 +85,7 @@
     document.querySelectorAll("a").forEach(function (a) {
       if (/이메일/.test(textOf(a))) { a.querySelector("span").textContent = "로그인 없이 시작하기"; a.setAttribute("href", "#"); a.dataset.rm = "guest"; }
     });
-    var ver = document.createElement("div"); ver.textContent = "ReelMate v9";
+    var ver = document.createElement("div"); ver.textContent = "ReelMate v10";
     ver.style.cssText = "text-align:center;color:#555;font:11px sans-serif;padding:6px"; document.body.appendChild(ver);
     if (finishLogin()) toast("로그인 확인 중...", 2000);
     else St.get("user").then(function (u) {
