@@ -149,3 +149,8 @@ label.lbl { display: block; font-size: 13px; font-weight: 700; margin: 0 0 6px; 
 .empty { text-align: center; padding: 34px 16px; color: var(--sub); font-size: 14px; line-height: 1.6; }
 .empty .ms { font-size: 44px; color: var(--mute); margin-bottom: 8px; }
 .hide { display: none !important; }
+.grid2 > .card, .grid3 > .card, .btns > .card { margin-top: 0; }
+.opt:not(.on) .ck .ms { visibility: hidden; }
+.opt .ck .ms { font-size: 15px; color: #fff; }
+* { scrollbar-width: none; }
+::-webkit-scrollbar { display: none; }

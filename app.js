@@ -1,7 +1,7 @@
 // ReelMate 앱 화면 전체 (모든 버튼이 실제로 동작하도록 한 파일에서 관리)
 (function () {
   "use strict";
-  var VERSION = "v11";
+  var VERSION = "v12";
   var S = window.SCREEN, R = window.Reel, St = R.Store, C = window.REELMATE_CONFIG || {};
   try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { scope: "../" }); } catch (e) {}
 
