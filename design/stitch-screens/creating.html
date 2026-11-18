@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ReelMate - AI 영상 제작 중</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#b95502",
+            "outline-variant": "#5a4045",
+            "on-tertiary-fixed-variant": "#5516be",
+            "surface-container-low": "#1b1b23",
+            "on-surface-variant": "#e2bdc3",
+            "surface": "#13131a",
+            "error": "#ffb4ab",
+            "inverse-on-surface": "#303038",
+            "on-primary-fixed": "#3f0017",
+            "surface-dim": "#13131a",
+            "surface-tint": "#ffb1c1",
+            "surface-container": "#1f1f27",
+            "tertiary": "#d0bcff",
+            "surface-container-highest": "#34343d",
+            "on-background": "#e4e1ec",
+            "primary-container": "#ff4c85",
+            "surface-variant": "#34343d",
+            "primary-fixed": "#ffd9df",
+            "on-secondary-container": "#fff7f4",
+            "primary-fixed-dim": "#ffb1c1",
+            "tertiary-container": "#a078ff",
+            "secondary-fixed-dim": "#ffb68d",
+            "background": "#13131a",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#763300",
+            "on-primary": "#66002a",
+            "tertiary-fixed": "#e9ddff",
+            "on-tertiary-fixed": "#23005c",
+            "on-tertiary-container": "#340080",
+            "on-surface": "#e4e1ec",
+            "on-secondary": "#532200",
+            "inverse-primary": "#bb0053",
+            "on-primary-container": "#5a0024",
+            "on-error-container": "#ffdad6",
+            "outline": "#aa888e",
+            "primary": "#ffb1c1",
+            "on-error": "#690005",
+            "surface-bright": "#393841",
+            "secondary-fixed": "#ffdbc9",
+            "surface-container-lowest": "#0d0d15",
+            "on-primary-fixed-variant": "#90003e",
+            "tertiary-fixed-dim": "#d0bcff",
+            "surface-container-high": "#292932",
+            "inverse-surface": "#e4e1ec",
+            "secondary": "#ffb68d",
+            "on-tertiary": "#3c0091",
+            "on-secondary-fixed": "#321200"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Plus Jakarta Sans"],
+            "code-metric": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "code-metric": ["13px", { "lineHeight": "16px", "fontWeight": "700" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "fontWeight": "800" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.28; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.08); }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-ambient-glow {
+      animation: pulse-slow 3.2s ease-in-out infinite;
+    }
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary-container selection:text-on-primary-container">
+<!-- Mobile Viewport Canvas Container -->
+<main class="w-full max-w-md min-h-screen bg-surface-container-lowest relative flex flex-col justify-between overflow-x-hidden border-x border-surface-container-high/40 pb-6">
+<!-- Top Ambient Lights -->
+<div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-gradient-to-br from-primary-container/20 to-secondary/15 blur-3xl"></div>
+<div class="pointer-events-none absolute top-72 -left-20 w-64 h-64 rounded-full bg-tertiary-container/15 blur-3xl"></div>
+<!-- Task Screen Header: Focus Journey Mode (Nav Shell Suppressed per Destination Rule) -->
+<header class="relative z-20 flex items-center justify-between px-margin pt-6 pb-2">
+<button aria-label="최소화" class="w-10 h-10 rounded-full bg-surface-container/60 hover:bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-on-surface active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low/80 border border-outline-variant/30 backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-md text-label-md text-on-surface">AI 자동 생성 중...</span>
+</div>
+<button aria-label="정보" class="w-10 h-10 rounded-full bg-surface-container/60 hover:bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-on-surface-variant active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="info">info</span>
+</button>
+</header>
+<!-- Center Stage: Glowing Gradient Progress Ring & Status -->
+<section class="relative z-10 flex flex-col items-center justify-center px-margin pt-4 pb-2 text-center">
+<!-- Glowing Pulsating Aura -->
+<div class="relative w-64 h-64 flex items-center justify-center my-2">
+<div class="absolute inset-2 rounded-full bg-gradient-to-tr from-primary-container via-secondary to-tertiary-container blur-2xl animate-ambient-glow"></div>
+<div class="absolute inset-6 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant/30"></div>
+<!-- SVG Progress Ring -->
+<svg class="relative w-56 h-56 -rotate-90 transform" viewbox="0 0 200 200">
+<defs>
+<lineargradient id="reelGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#ff4c85"></stop>
+<stop offset="50%" stop-color="#ffb68d"></stop>
+<stop offset="100%" stop-color="#b95502"></stop>
+</lineargradient>
+<filter height="140%" id="glowFilter" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="coloredBlur" stddeviation="3.5"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Track Ring -->
+<circle class="text-surface-container-highest/60" cx="100" cy="100" fill="transparent" r="82" stroke="currentColor" stroke-width="9"></circle>
+<!-- Progress Ring Fill (78% of ~515 circumference) -->
+<circle class="progress-ring-circle" cx="100" cy="100" fill="transparent" filter="url(#glowFilter)" r="82" stroke="url(#reelGradient)" stroke-dasharray="515" stroke-dashoffset="113" stroke-linecap="round" stroke-width="9.5"></circle>
+</svg>
+<!-- Ring Center Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<div class="flex items-baseline gap-0.5">
+<span class="font-display-hero text-display-hero font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-secondary to-secondary-fixed">78</span>
+<span class="font-headline-sm text-headline-sm font-bold text-secondary">%</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary tracking-wider font-semibold uppercase mt-0.5">EST: 6초 남음</span>
+<div class="mt-2.5 flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high/90 border border-outline-variant/40 shadow-inner">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-sm text-label-sm text-on-surface">시네마틱 모드</span>
+</div>
+</div>
+</div>
+<!-- Action Label -->
+<div class="mt-3 flex flex-col items-center">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">15초 릴스 렌더링 중</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 mt-1">하이라이트 클립과 오디오 믹싱 작업을 진행하고 있어요</p>
+</div>
+</section>
+<!-- Detailed Step-by-Step Checklist Card -->
+<section class="relative z-10 px-margin my-2">
+<div class="p-4 rounded-lg bg-surface-container-low/90 border border-outline-variant/30 backdrop-blur-xl shadow-lg space-y-3.5">
+<div class="flex items-center justify-between pb-1 border-b border-surface-container-high/60">
+<span class="font-label-md text-label-md text-on-surface-variant">제작 파이프라인 단계</span>
+<span class="font-code-metric text-code-metric text-primary">2 / 3 진행 중</span>
+</div>
+<!-- Step 1: Completed -->
+<div class="flex items-center justify-between p-2.5 rounded-DEFAULT bg-surface-container/50 border border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 border border-secondary/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">사진 분석 중</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant/70">8개 미디어 시각 구도 및 표정 감지</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-secondary-container/25 text-secondary font-semibold border border-secondary/30">
+            완료
+          </span>
+</div>
+<!-- Step 2: In Progress -->
+<div class="flex items-center justify-between p-2.5 rounded-DEFAULT bg-primary-container/10 border border-primary-container/40 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-container to-secondary"></div>
+<div class="flex items-center gap-3 pl-1">
+<div class="relative w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/50 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[18px] animate-spin" data-icon="progress_activity">progress_activity</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">자막 쓰는 중</span>
+<span class="font-body-sm text-[11px] text-primary/80">트렌디한 폰트 타이포그래피 생성</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold shadow-sm shadow-primary-container/40">
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary-container animate-pulse"></span>
+<span>생성 중... 82%</span>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex items-center justify-between p-2.5 rounded-DEFAULT bg-surface-container/25 border border-outline-variant/15 opacity-65">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-on-surface-variant/50">
+<span class="material-symbols-outlined text-[18px]" data-icon="movie_filter">movie_filter</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-[14px] text-on-surface-variant font-medium">영상 만드는 중</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant/50">비트 동기화 인코딩 및 컬러 그레이딩</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-surface-container-high/60 text-on-surface-variant/60 font-medium">
+            대기 중
+          </span>
+</div>
+</div>
+</section>
+<!-- Bottom Assistive Information & Actions -->
+<footer class="relative z-10 px-margin flex flex-col gap-3.5 pt-2">
+<!-- Tip Card -->
+<div class="p-3.5 rounded-DEFAULT bg-surface-container/60 border border-outline-variant/25 backdrop-blur-md flex items-start gap-2.5">
+<span class="text-[18px] leading-tight select-none">💡</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant leading-relaxed text-left">
+<strong class="text-on-surface font-semibold">팁:</strong> 비트 싱크와 트렌드 BGM이 자동으로 합성되고 있어요! 잠시만 기다려주세요.
+        </p>
+</div>
+<!-- Background Processing Action -->
+<div class="flex flex-col items-center gap-2">
+<button class="w-full py-3.5 px-4 rounded-full bg-surface-container-high/70 hover:bg-surface-container-high text-on-surface border border-outline-variant/40 font-label-lg text-label-lg flex items-center justify-center gap-2 active:scale-97 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="open_in_browser">open_in_browser</span>
+<span>백그라운드에서 계속하기</span>
+</button>
+<p class="font-label-sm text-[11px] text-on-surface-variant/60">
+          완료 시 푸시 알림으로 바로 확인하실 수 있습니다.
+        </p>
+</div>
+</footer>
+</main>
+<!-- Interactive Simulation Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let progress = 78;
+      const progressEl = document.querySelector('.font-display-hero');
+      const circleEl = document.querySelector('.progress-ring-circle');
+      const circumference = 515;
+
+      // Realistic lightweight micro-ticker for immersion
+      const interval = setInterval(() => {
+        if (progress < 94) {
+          progress += 1;
+          if (progressEl) progressEl.textContent = progress;
+          if (circleEl) {
+            const offset = circumference - (circumference * progress / 100);
+            circleEl.style.strokeDashoffset = offset;
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 2600);
+    });
+  </script>
+<script>window.SCREEN="creating"</script><script src="../config.js" defer></script><script src="../vendor/glfx.js" defer></script><script src="../vendor/smartcrop.js" defer></script><script src="../edit.js" defer></script><script src="../reel.js" defer></script><script src="../account.js" defer></script><script src="../nav.js" defer></script>
+</body></html>

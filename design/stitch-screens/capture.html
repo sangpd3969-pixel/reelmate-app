@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ReelMate - 촬영 및 미디어 선택</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#b95502",
+            "outline-variant": "#5a4045",
+            "on-tertiary-fixed-variant": "#5516be",
+            "surface-container-low": "#1b1b23",
+            "on-surface-variant": "#e2bdc3",
+            "surface": "#13131a",
+            "error": "#ffb4ab",
+            "inverse-on-surface": "#303038",
+            "on-primary-fixed": "#3f0017",
+            "surface-dim": "#13131a",
+            "surface-tint": "#ffb1c1",
+            "surface-container": "#1f1f27",
+            "tertiary": "#d0bcff",
+            "surface-container-highest": "#34343d",
+            "on-background": "#e4e1ec",
+            "primary-container": "#ff4c85",
+            "surface-variant": "#34343d",
+            "primary-fixed": "#ffd9df",
+            "on-secondary-container": "#fff7f4",
+            "primary-fixed-dim": "#ffb1c1",
+            "tertiary-container": "#a078ff",
+            "secondary-fixed-dim": "#ffb68d",
+            "background": "#13131a",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#763300",
+            "on-primary": "#66002a",
+            "tertiary-fixed": "#e9ddff",
+            "on-tertiary-fixed": "#23005c",
+            "on-tertiary-container": "#340080",
+            "on-surface": "#e4e1ec",
+            "on-secondary": "#532200",
+            "inverse-primary": "#bb0053",
+            "on-primary-container": "#5a0024",
+            "on-error-container": "#ffdad6",
+            "outline": "#aa888e",
+            "primary": "#ffb1c1",
+            "on-error": "#690005",
+            "surface-bright": "#393841",
+            "secondary-fixed": "#ffdbc9",
+            "surface-container-lowest": "#0d0d15",
+            "on-primary-fixed-variant": "#90003e",
+            "tertiary-fixed-dim": "#d0bcff",
+            "surface-container-high": "#292932",
+            "inverse-surface": "#e4e1ec",
+            "secondary": "#ffb68d",
+            "on-tertiary": "#3c0091",
+            "on-secondary-fixed": "#321200"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Plus Jakarta Sans"],
+            "code-metric": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "code-metric": ["13px", { "lineHeight": "16px", "fontWeight": "700" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "fontWeight": "800" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #0B0B0F;
+      color: #e4e1ec;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shutter-glow {
+      box-shadow: 0 0 28px rgba(255, 76, 133, 0.55), 0 0 60px rgba(185, 85, 2, 0.3);
+    }
+    .neon-pill-glow {
+      box-shadow: 0 4px 20px rgba(255, 76, 133, 0.35);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface antialiased select-none h-screen w-screen overflow-hidden flex justify-center">
+<!-- Mobile Screen Container (Constrained width for elite mobile preview) -->
+<div class="relative w-full max-w-md h-full flex flex-col justify-between overflow-hidden bg-surface-container-lowest border-x border-surface-container-highest/20">
+<!-- Top Action Bar (Safe Area Compliant) -->
+<header class="relative z-30 pt-3 pb-2 px-margin flex items-center justify-between bg-surface-container-lowest/80 backdrop-blur-md">
+<!-- Close / Back Button (Focused Task Journey Dismissal) -->
+<button aria-label="닫기" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high/60 border border-outline-variant/30 text-on-surface hover:bg-surface-container-high active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-headline-sm">close</span>
+</button>
+<!-- Selected Count Chip with Glowing Gradient Border -->
+<div class="px-3 py-1.5 rounded-full bg-surface-container/90 border border-primary-container/40 flex items-center gap-1.5 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface font-semibold tracking-tight">3장 선택됨 <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">(최대 10장)</span></span>
+</div>
+<!-- Quick Camera Controls (Flash & Flip) -->
+<div class="flex items-center gap-2">
+<button aria-label="플래시" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high/60 border border-outline-variant/30 text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" id="flash-toggle" type="button">
+<span class="material-symbols-outlined text-headline-sm">flash_on</span>
+</button>
+<button aria-label="카메라 전환" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high/60 border border-outline-variant/30 text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" id="flip-camera" type="button">
+<span class="material-symbols-outlined text-headline-sm">flip_camera_ios</span>
+</button>
+</div>
+</header>
+<!-- Main Upper Section: Realistic Live Viewfinder (9:16 Visual Canvas) -->
+<main class="relative flex-1 mx-margin my-1 rounded-2xl overflow-hidden border border-outline-variant/30 shadow-2xl bg-surface-container-low flex flex-col justify-between">
+<!-- Simulated Camera Live Stream Background -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover brightness-[0.88] contrast-105 scale-105 transition-transform duration-700 ease-out" data-alt="Cinematic neon-lit cyberpunk creative studio scene with shallow depth of field, subtle purple and magenta atmospheric fog, soft moody rim light reflecting off polished glass table surfaces, cinematic framing suitable for vertical short-form reels." id="live-camera-feed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjUeRtJLWT9nRq3SwjTDD5bXp2zhRtl-_MN-djKAhrJL2QVmm7AJZRdwzfEcvQuyuU-v3mlQp61StB4VMX0qqEet2S-jafGh_OwpMC5zRvnklQFr_qGO_sa4oePqxY0VRr6HJEVYj2fRdFqOaonsxyZ2G7CWi0kSLqCeVyixU4bFjbnyOTiIDewh72rA-0GSt92IGoDVtVyVIeEka7WdqUxq_sRnlF57HzBlPDlGY"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container-lowest/60 via-transparent to-surface-container-lowest/90 pointer-events-none"></div>
+</div>
+<!-- Viewfinder Framing Grid (3x3 Golden Ratio Overlay) -->
+<div class="absolute inset-0 z-10 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-25">
+<div class="border-r border-b border-white/40"></div>
+<div class="border-r border-b border-white/40"></div>
+<div class="border-b border-white/40"></div>
+<div class="border-r border-b border-white/40"></div>
+<div class="border-r border-b border-white/40"></div>
+<div class="border-b border-white/40"></div>
+<div class="border-r border-white/40"></div>
+<div class="border-r border-white/40"></div>
+<div></div>
+</div>
+<!-- Top Segment Pill: '사진' (Active) vs '동영상' -->
+<div class="relative z-20 pt-3 flex justify-center items-center">
+<div class="inline-flex p-1 rounded-full bg-surface-container-lowest/70 backdrop-blur-xl border border-outline-variant/40 shadow-lg">
+<button class="px-4 py-1 rounded-full font-label-md text-label-md text-on-surface bg-gradient-to-r from-primary-container to-secondary-container font-bold shadow-md tracking-wider transition-all duration-200" id="tab-photo" type="button">
+            사진
+          </button>
+<button class="px-4 py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface font-medium tracking-wider transition-all duration-200" id="tab-video" type="button">
+            동영상
+          </button>
+</div>
+</div>
+<!-- Viewfinder Central Focus Reticle -->
+<div class="relative z-10 self-center flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 rounded-xl border border-primary/50 flex items-center justify-center animate-pulse">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container shadow-sm"></div>
+</div>
+</div>
+<!-- Lower Controls of Camera View: Aspect Ratio Pill & Shutter Trigger -->
+<div class="relative z-20 pb-4 px-4 flex flex-col items-center gap-3">
+<!-- Live Indicator & Aspect Badge -->
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant/30 font-code-metric text-code-metric text-primary flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span> 9:16 REELS
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant/30 font-code-metric text-code-metric text-on-surface-variant">
+            4K 60FPS
+          </span>
+</div>
+<!-- Shutter Button Container -->
+<div class="flex items-center justify-center w-full relative">
+<!-- Big Circular Gradient Shutter Capture Button -->
+<button aria-label="촬영 버튼" class="relative group active:scale-90 transition-transform duration-150" id="shutter-btn" type="button">
+<!-- Radiant Outer Ring -->
+<div class="w-20 h-20 rounded-full border-2 border-white/80 p-1 flex items-center justify-center backdrop-blur-sm transition-all group-hover:border-primary">
+<!-- Internal Gradient Core with Glow -->
+<div class="w-full h-full rounded-full bg-gradient-to-tr from-primary-container via-primary-container to-secondary-container shutter-glow flex items-center justify-center transition-all duration-200">
+<span class="material-symbols-outlined text-on-primary-container text-headline-md font-bold">photo_camera</span>
+</div>
+</div>
+</button>
+<!-- Quick Filter Presets Trigger (Floating Right of Shutter) -->
+<button aria-label="필터 효과" class="absolute right-4 w-10 h-10 rounded-full bg-surface-container-lowest/80 border border-outline-variant/40 flex items-center justify-center text-on-surface active:scale-95 transition-all shadow-md" type="button">
+<span class="material-symbols-outlined text-headline-sm text-secondary">auto_fix_high</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Lower Section: Gallery Roll Thumbnail Strip (Multiselect Enabled) -->
+<section class="relative z-30 pt-2 pb-1 bg-surface-container-lowest">
+<!-- Section Header -->
+<div class="px-margin flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-label-md text-primary-container">photo_library</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">최근 미디어</span>
+<span class="font-code-metric text-code-metric text-on-surface-variant font-semibold">142</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span>다중 선택 모드</span>
+<span class="material-symbols-outlined text-body-sm text-primary">check_circle</span>
+</div>
+</div>
+<!-- Horizontal Thumbnail Carousel -->
+<div class="px-margin flex items-center gap-2.5 overflow-x-auto custom-scrollbar pb-1">
+<!-- Thumbnail 1: Selected (#1) -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 border-primary-container ring-2 ring-primary-container/30 shadow-lg cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="Vibrant night cityscape with futuristic skyscrapers adorned in warm orange and cold neon purple illumination, shot on wide-angle camera with cinematic reflection puddles on the ground." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzB_ftLobA-zcGXM4AzR---Xz7DDWr6LEk7vQg0_Kit9g1SiMKTFKz8gf4-rWXfvK8bDFo7jFmWSzDyv7L1QXFXcRw6oRnTvvqNNCftmxdbQ0eVnAO03XQO7YZ7AnOvRTJvQ9oCEwIEu-I-tfTQumNskCZ2FPmaqQ7mSegGwSreH4yVgIWHAeOwqoqvDWoyYpcoHDaKNPv-IhKIAUdvHVGF9HJDxq0JMvQayyIFbE"/>
+<div class="absolute inset-0 bg-primary-container/15"></div>
+<!-- Numbered Badge 1 -->
+<div class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-code-metric text-code-metric font-extrabold flex items-center justify-center shadow-md">
+            1
+          </div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/90 drop-shadow">0:15</span>
+</div>
+<!-- Thumbnail 2: Selected (#2) -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 border-primary-container ring-2 ring-primary-container/30 shadow-lg cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="Close up aesthetic shot of an energetic street dancer illuminated by warm golden hour lighting paired with striking magenta shadows, captured with sharp motion blur trails." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgkkYhT__DG_-EIqY62HN-RRY4_-dA-teYs3ZqYQo_R-ZZJvrFdjDrZbdWS3CJoJg-Hzk9upbrWnLz7kyMu9qzb8lYZyHroFP5D3T78NixDgbN0Vyax1DPa-PKDXsM89uNqxU4kic5h_ppqcie2CLcr6DucRXa293AjwvDe9Dr2WC36coePnEPwoy-_tPWF5fmxbuIlg3j8kw9ox7tdHplubaosq474ab4_D1gPyw"/>
+<div class="absolute inset-0 bg-primary-container/15"></div>
+<!-- Numbered Badge 2 -->
+<div class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-code-metric text-code-metric font-extrabold flex items-center justify-center shadow-md">
+            2
+          </div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/90 drop-shadow">0:08</span>
+</div>
+<!-- Thumbnail 3: Selected (#3) -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 border-primary-container ring-2 ring-primary-container/30 shadow-lg cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="Modern minimalist concrete architectural interior with dramatic volumetric rays of sunlight streaming through slitted roof creating rhythmic geometric shadow lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkDgSnF7-3aSwNkJVHMZdq6wABEwdw54sGjTxjs-8mbrfPlViPkDA188pWZQZeBc9CBJqz4V4a9F538G2TAqQUA-Hx6nW4GBP7y4ZVUZUHt10xAVr8_phQqLucbEo2h7Eu4bGTolBvA1oitHCfELBk039LSyQbquzePLxtgLeeB5fKn8X1fdw-4IertRRuICJP1RblPzAwDc79yteFcyj0GG7WqLl-EWIy47llJus"/>
+<div class="absolute inset-0 bg-primary-container/15"></div>
+<!-- Numbered Badge 3 -->
+<div class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-code-metric text-code-metric font-extrabold flex items-center justify-center shadow-md">
+            3
+          </div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/90 drop-shadow">0:22</span>
+</div>
+<!-- Thumbnail 4: Unselected -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-outline-variant/40 bg-surface-container-high opacity-85 hover:opacity-100 cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="Atmospheric coffee shop counter with artisanal espresso machine, warm ambient low-key tungsten lighting, steam rising gracefully against dark mahogany wooden walls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQH9QOgPQJeStbCgZ8U-Jz7WKCYyFpXz_LEtuQdYOXYCJG_QvYxXu6pQFtizVNkIHy8oQFbydIsjR7XGMWcqpMhhQTtz1cKzh_7KFStGN3r6evxJM3VwTrtf7i1PXeQ1IE0GKWgime-kZoP32jdevPq6JYeDI1at6T7yr8w4-M9gbkIjW10ex1ufeQ7mmLS1jGNhcmxH6sLHgyjnmj0viHrc0_Z_em1K1CUXcJkws"/>
+<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full border border-white/70 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+</div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/80 drop-shadow">0:12</span>
+</div>
+<!-- Thumbnail 5: Unselected -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-outline-variant/40 bg-surface-container-high opacity-85 hover:opacity-100 cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="High-fashion studio portrait of a model with sleek wet-look styling wearing iridescent metallic jacket under saturated ultraviolet and amber gel lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYB-UU6LXhfGEOO9ER_oGxLPCJbFO6aXolfxuxh92ud7mm_kSunjQzSemnslYB3pp2g29ka218fM4RKfk_JHcSgY_15ywRZ88BGkDue-iVYcSKLbm2pd1nidTly9UChyO_0A8wJL0vwof2c0MKQo_MafgUfdh7YfvIvv3NQereq6PsrQ-R1-j3H4Of0Ds0SeX_81OOuatnLDFOYID4X0f6PaCbHij2eJJNGCWGBR0"/>
+<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full border border-white/70 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+</div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/80 drop-shadow">0:05</span>
+</div>
+<!-- Thumbnail 6: Unselected -->
+<div class="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-outline-variant/40 bg-surface-container-high opacity-85 hover:opacity-100 cursor-pointer transform active:scale-95 transition-all">
+<img class="w-full h-full object-cover" data-alt="Distant silhouette of coastal waves crashing under deep violet twilight skies, foam sparkling with subtle phosphorescent bioluminescent blue particles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiBzxbGncqbpb5T7nCsOuOM_XEccwFhCrhuqaLaIIo0b6lKzp57V9OcxFG73D-ikgRSktEpWZNJyWEtm33HEMe-XYpfAmYCGrSvFVv_T_5zrHpwKUtV-NStGqk5PGQaKNblBIGX_joAKqtIVobbAY861BlSFL1kPECQeaVl4ziFYywYS2iceMvmtZa8j7S7e6AKtsOHZHCi10EDztpAHymZVcaK1d6PQxDGE_2ku8"/>
+<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full border border-white/70 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+</div>
+<span class="absolute bottom-1 left-1.5 font-code-metric text-[10px] text-white/80 drop-shadow">0:30</span>
+</div>
+</div>
+</section>
+<!-- Bottom Fixed CTA Bar (No Top Border; Elevated with Soft Drop-Shadow) -->
+<footer class="relative z-40 px-margin pt-2 pb-5 bg-surface-container-low/95 backdrop-blur-xl flex items-center gap-3 shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
+<!-- Secondary Tool Button: '앨범 전체보기' -->
+<button class="flex-1 py-3 px-3 rounded-full bg-surface-container border border-outline-variant/40 text-on-surface font-label-lg text-label-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-surface-container-high active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-headline-sm text-on-surface-variant">photo_library</span>
+<span>앨범 전체보기</span>
+</button>
+<!-- Primary Gradient Pink-to-Orange CTA: '다음 (3)' -->
+<button class="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-primary-container via-primary-container to-secondary-container text-white font-label-lg text-label-lg font-bold flex items-center justify-center gap-1.5 neon-pill-glow active:scale-95 transition-all hover:brightness-105" type="button">
+<span>다음 (3)</span>
+<span class="material-symbols-outlined text-headline-sm font-bold">arrow_forward</span>
+</button>
+</footer>
+</div>
+<!-- Inline Interaction Logic (Micro-Interactions for Studio Feel) -->
+<script>
+    // Tab switching between Photo & Video
+    const tabPhoto = document.getElementById('tab-photo');
+    const tabVideo = document.getElementById('tab-video');
+
+    tabPhoto.addEventListener('click', () => {
+      tabPhoto.className = "px-4 py-1 rounded-full font-label-md text-label-md text-on-surface bg-gradient-to-r from-primary-container to-secondary-container font-bold shadow-md tracking-wider transition-all duration-200";
+      tabVideo.className = "px-4 py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface font-medium tracking-wider transition-all duration-200";
+    });
+
+    tabVideo.addEventListener('click', () => {
+      tabVideo.className = "px-4 py-1 rounded-full font-label-md text-label-md text-on-surface bg-gradient-to-r from-primary-container to-secondary-container font-bold shadow-md tracking-wider transition-all duration-200";
+      tabPhoto.className = "px-4 py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface font-medium tracking-wider transition-all duration-200";
+    });
+
+    // Flash toggle micro-state
+    const flashToggle = document.getElementById('flash-toggle');
+    let flashOn = true;
+    flashToggle.addEventListener('click', () => {
+      flashOn = !flashOn;
+      const icon = flashToggle.querySelector('.material-symbols-outlined');
+      if (flashOn) {
+        icon.textContent = 'flash_on';
+        flashToggle.classList.add('text-primary');
+        flashToggle.classList.remove('text-on-surface-variant');
+      } else {
+        icon.textContent = 'flash_off';
+        flashToggle.classList.remove('text-primary');
+        flashToggle.classList.add('text-on-surface-variant');
+      }
+    });
+
+    // Camera Flip Animation
+    const flipBtn = document.getElementById('flip-camera');
+    const feed = document.getElementById('live-camera-feed');
+    let flipped = false;
+    flipBtn.addEventListener('click', () => {
+      flipped = !flipped;
+      feed.style.transform = flipped ? 'scaleX(-1) scale(1.05)' : 'scaleX(1) scale(1.05)';
+      flipBtn.style.transform = 'rotate(180deg)';
+      setTimeout(() => { flipBtn.style.transform = 'none'; }, 200);
+    });
+
+    // Shutter Trigger Haptic visual feedback
+    const shutter = document.getElementById('shutter-btn');
+    shutter.addEventListener('click', () => {
+      feed.classList.add('brightness-200');
+      setTimeout(() => {
+        feed.classList.remove('brightness-200');
+      }, 90);
+    });
+  </script>
+<script>window.SCREEN="capture"</script><script src="../config.js" defer></script><script src="../vendor/glfx.js" defer></script><script src="../vendor/smartcrop.js" defer></script><script src="../edit.js" defer></script><script src="../reel.js" defer></script><script src="../account.js" defer></script><script src="../nav.js" defer></script>
+</body></html>

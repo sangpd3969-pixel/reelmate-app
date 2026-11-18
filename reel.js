@@ -56,8 +56,10 @@
 
   // ---------- 3. 휴대폰 안에서 영상 만들기 (캔버스 + MediaRecorder) ----------
   // 사진 보정·구도는 edit.js(glfx.js + smartcrop.js)가 AI 보정값대로 먼저 처리한다.
-  var W_ = 720, H_ = 1280, FPS = 30, FADE = 0.5;
+  // 항목: 사진 = dataURL 문자열, 동영상 = { type:"video", blob, thumb, duration }
+  var W_ = 720, H_ = 1280, FPS = 30, FADE = 0.5, CLIP_MAX = 8;
   var FONT = "'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
+  var STYLES = { basic: "기본 (흰 글씨)", box: "흰 박스", yellow: "노랑 강조", neon: "네온 핑크" };
   function pickMime() {
     var c = ["video/mp4;codecs=avc1.42E01E", "video/mp4", "video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
     for (var i = 0; i < c.length; i++) if (W.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c[i])) return c[i];
@@ -72,79 +74,146 @@
     if (cur) lines.push(cur);
     return lines;
   }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  // 자막 그리기 (스타일 4가지)
+  function drawText(ctx, text, cx, cy, size, style, lineH) {
+    ctx.font = (style === "box" ? "800 " : "900 ") + size + "px " + FONT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var lines = wrap(ctx, text, W_ - 110), n = lines.length, y0 = cy - (n - 1) * lineH / 2;
+    lines.forEach(function (l, i) {
+      var y = y0 + i * lineH;
+      ctx.shadowBlur = 0; ctx.lineJoin = "round";
+      if (style === "box") {
+        var w = ctx.measureText(l).width + 36;
+        ctx.fillStyle = "rgba(255,255,255,0.94)"; roundRect(ctx, cx - w / 2, y - lineH / 2 + 4, w, lineH - 4, 14); ctx.fill();
+        ctx.fillStyle = "#111";
+      } else if (style === "yellow") {
+        ctx.strokeStyle = "#000"; ctx.lineWidth = 10; ctx.strokeText(l, cx, y); ctx.fillStyle = "#FFE14D";
+      } else if (style === "neon") {
+        ctx.shadowColor = "#FF3D7F"; ctx.shadowBlur = 26; ctx.strokeStyle = "#FF3D7F"; ctx.lineWidth = 4; ctx.strokeText(l, cx, y); ctx.fillStyle = "#fff";
+      } else {
+        ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 16; ctx.fillStyle = "#fff";
+      }
+      ctx.fillText(l, cx, y);
+    });
+    ctx.shadowBlur = 0;
+  }
+  function cssFilter(e) {
+    e = e || {};
+    var b = 1 + (Number(e.brightness) || 0) * 0.25 + (Number(e.exposure) || 0) * 0.3, c = 1 + (Number(e.contrast) || 0) * 0.35,
+      s = 1 + (Number(e.saturation) || 0) * 0.5 + (Number(e.vibrance) || 0) * 0.3;
+    return "brightness(" + b.toFixed(2) + ") contrast(" + c.toFixed(2) + ") saturate(" + s.toFixed(2) + ")";
+  }
+  function drawCover(ctx, src, sw, sh, z) {
+    var s = Math.max(W_ / sw, H_ / sh) * z;
+    ctx.drawImage(src, (W_ - sw * s) / 2, (H_ - sh * s) / 2, sw * s, sh * s);
+  }
+  function drawFit(ctx, src, sw, sh, z) {
+    var s = Math.min(W_ / sw, H_ / sh) * z;
+    ctx.drawImage(src, (W_ - sw * s) / 2, (H_ - sh * s) / 2, sw * s, sh * s);
+  }
   function drawFrame(ctx, slides, caps, title, t, vid) {
-    var SLIDE = vid.slideSeconds, step = SLIDE - FADE;
     ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W_, H_);
     for (var i = 0; i < slides.length; i++) {
-      var st = i * step, lt = t - st;
-      if (lt < 0 || lt > SLIDE) continue;
-      var a = Math.min(1, lt / FADE, (SLIDE - lt) / FADE);
-      if (i === 0) a = Math.min(1, (SLIDE - lt) / FADE);
+      var sl = slides[i], lt = t - sl.start, D = sl.dur;
+      if (lt < 0 || lt > D) continue;
+      var a = Math.min(1, lt / FADE, (D - lt) / FADE);
+      if (i === 0) a = Math.min(1, (D - lt) / FADE);
       if (i === slides.length - 1 && lt >= FADE) a = Math.min(1, lt / FADE);
       ctx.globalAlpha = Math.max(0, a);
-      var sl = slides[i], k = lt / SLIDE;
-      var z = sl.zoom === "none" ? 1 : sl.zoom === "out" ? 1.12 - 0.12 * k : 1 + 0.12 * k;
-      if (sl.mode === "fill") {
+      var k = lt / D, z = sl.zoom === "none" ? 1 : sl.zoom === "out" ? 1.12 - 0.12 * k : 1 + 0.12 * k;
+      if (sl.video) {
+        var v = sl.video;
+        if (!sl.playing) { sl.playing = true; try { v.currentTime = 0; } catch (e) {} v.play().catch(function () {}); }
+        if (sl.mode === "fit" && sl.bg) ctx.drawImage(sl.bg, 0, 0, W_, H_);
+        if (v.readyState >= 2 && v.videoWidth) {
+          if (sl.filter && "filter" in ctx) ctx.filter = sl.filter;
+          (sl.mode === "fit" ? drawFit : drawCover)(ctx, v, v.videoWidth, v.videoHeight, 1);
+          if ("filter" in ctx) ctx.filter = "none";
+        } else if (sl.bg) ctx.drawImage(sl.bg, 0, 0, W_, H_);
+      } else if (sl.mode === "fill") {
         ctx.drawImage(sl.fg, (W_ - W_ * z) / 2, (H_ - H_ * z) / 2, W_ * z, H_ * z);
       } else {
         ctx.drawImage(sl.bg, 0, 0, W_, H_);
-        var fs = Math.min(W_ / sl.fg.width, H_ / sl.fg.height) * z;
-        ctx.drawImage(sl.fg, (W_ - sl.fg.width * fs) / 2, (H_ - sl.fg.height * fs) / 2, sl.fg.width * fs, sl.fg.height * fs);
+        drawFit(ctx, sl.fg, sl.fg.width, sl.fg.height, z);
       }
       var cap = caps[i] || "";
       if (cap) {
         var p = Math.min(1, Math.max(0, (lt - 0.25) / 0.4));
         ctx.globalAlpha = Math.max(0, a) * p;
-        ctx.font = "800 46px " + FONT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.shadowColor = "rgba(0,0,0,0.85)"; ctx.shadowBlur = 16; ctx.fillStyle = "#fff";
-        var lines = wrap(ctx, cap, W_ - 100);
         var baseY = vid.captionPosition === "top" ? 330 : vid.captionPosition === "middle" ? H_ / 2 : H_ - 300;
-        var y0 = baseY + (1 - p) * 30;
-        lines.forEach(function (l, n) { ctx.fillText(l, W_ / 2, y0 + n * 60); });
-        ctx.shadowBlur = 0;
+        drawText(ctx, cap, W_ / 2, baseY + (1 - p) * 30, 46, vid.style, 62);
       }
     }
     if (title && t < 2.2) {
-      ctx.globalAlpha = Math.min(1, t / 0.3, (2.2 - t) / 0.3);
-      ctx.font = "900 56px " + FONT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 20; ctx.fillStyle = "#fff";
-      wrap(ctx, title, W_ - 100).forEach(function (l, n) { ctx.fillText(l, W_ / 2, 200 + n * 70); });
-      ctx.shadowBlur = 0;
+      ctx.globalAlpha = Math.max(0, Math.min(1, t / 0.3, (2.2 - t) / 0.3));
+      drawText(ctx, title, W_ / 2, 210, 56, vid.style === "box" ? "box" : vid.style === "basic" ? "basic" : vid.style, 74);
     }
     ctx.globalAlpha = 1;
   }
-  // opts: { edits: [사진별 보정값], video: { slideSeconds, captionPosition } }
-  function render(photos, caps, title, opts, onProgress) {
+  function loadVideo(item) {
+    return new Promise(function (res) {
+      var v = document.createElement("video");
+      v.muted = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.setAttribute("muted", ""); v.preload = "auto";
+      v.style.cssText = "position:fixed;left:-9999px;top:0;width:2px;height:2px;opacity:0";
+      document.body.appendChild(v);
+      var done = false, fin = function () { if (!done) { done = true; res(v); } };
+      v.oncanplay = fin; v.onloadeddata = fin; v.onerror = fin; setTimeout(fin, 4000);
+      v.src = URL.createObjectURL(item.blob); v.load();
+    });
+  }
+  function prepareItem(item, edit, slideSec) {
+    edit = edit || {};
+    if (item && item.type === "video") {
+      return Promise.all([loadVideo(item), W.ReelEdit.bgOf(item.thumb).catch(function () { return null; })]).then(function (r) {
+        var v = r[0], len = Math.min(CLIP_MAX, item.duration || v.duration || slideSec);
+        if (!isFinite(len) || len <= 0) len = slideSec;
+        return { video: v, bg: r[1], mode: edit.framing === "fit" ? "fit" : "fill", zoom: "none", dur: Math.max(1.5, len), filter: cssFilter(edit) };
+      });
+    }
+    var src = typeof item === "string" ? item : item.src;
+    return W.ReelEdit.prepare(src, edit).then(function (sl) { sl.dur = slideSec; return sl; });
+  }
+  // opts: { edits:[사진별 보정값], video:{ slideSeconds, captionPosition }, style:"basic|box|yellow|neon", showTitle:true }
+  function render(items, caps, title, opts, onProgress) {
     opts = opts || {};
     var mime = pickMime();
-    if (!mime) return Promise.reject(new Error("이 휴대폰 브라우저는 영상 만들기를 지원하지 않아요."));
-    var vid = opts.video || {};
-    vid = { slideSeconds: Math.max(1.5, Math.min(5, Number(vid.slideSeconds) || 3)), captionPosition: vid.captionPosition || "bottom" };
+    if (!mime) return Promise.reject(new Error("이 휴대폰 브라우저는 영상 만들기를 지원하지 않아요. 크롬이나 사파리 최신 버전에서 열어 주세요."));
+    var v0 = opts.video || {};
+    var vid = { slideSeconds: Math.max(1.5, Math.min(5, Number(v0.slideSeconds) || 3)), captionPosition: v0.captionPosition || "bottom",
+      style: STYLES[opts.style] ? opts.style : "basic" };
     var edits = opts.edits || [];
-    var prep = photos.map(function (p, i) { return W.ReelEdit.prepare(p, edits[i] || {}); });
-    return Promise.all(prep).then(function (slides) {
+    if (opts.showTitle === false) title = "";
+    return Promise.all(items.map(function (it, i) { return prepareItem(it, edits[i], vid.slideSeconds); })).then(function (slides) {
+      var t = 0;
+      slides.forEach(function (sl, i) { sl.start = t; t += sl.dur - (i < slides.length - 1 ? FADE : 0); });
+      var total = t;
       var c = document.createElement("canvas"); c.width = W_; c.height = H_;
       var ctx = c.getContext("2d");
-      var total = slides.length * (vid.slideSeconds - FADE) + FADE;
       var stream = c.captureStream(FPS);
       var rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 6000000 });
       var chunks = [];
       rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+      var cleanup = function () { slides.forEach(function (sl) { if (sl.video) { try { sl.video.pause(); URL.revokeObjectURL(sl.video.src); } catch (e) {} sl.video.remove(); } }); };
       return new Promise(function (res) {
-        rec.onstop = function () { res({ blob: new Blob(chunks, { type: mime.split(";")[0] }), mime: mime, duration: total }); };
+        rec.onstop = function () { cleanup(); res({ blob: new Blob(chunks, { type: mime.split(";")[0] }), mime: mime, duration: total }); };
         drawFrame(ctx, slides, caps, title, 0, vid);
         rec.start(250);
         var t0 = performance.now();
         (function loop() {
-          var t = (performance.now() - t0) / 1000;
-          drawFrame(ctx, slides, caps, title, Math.min(t, total), vid);
-          if (onProgress) onProgress(Math.min(1, t / total));
-          if (t < total) requestAnimationFrame(loop); else setTimeout(function () { rec.stop(); }, 150);
+          var tt = (performance.now() - t0) / 1000;
+          slides.forEach(function (sl) { if (sl.video && sl.playing && tt > sl.start + sl.dur) sl.video.pause(); });
+          drawFrame(ctx, slides, caps, title, Math.min(tt, total), vid);
+          if (onProgress) onProgress(Math.min(1, tt / total));
+          if (tt < total) requestAnimationFrame(loop); else setTimeout(function () { rec.stop(); }, 150);
         })();
       });
     });
   }
-  function thumbOf(dataUrl) {
+  function thumbOf(item) {
+    var dataUrl = typeof item === "string" ? item : item.thumb || item.src;
     return loadImg(dataUrl).then(function (im) {
       var c = document.createElement("canvas"); c.width = 270; c.height = 480;
       var x = c.getContext("2d"), s = Math.max(270 / im.width, 480 / im.height);
@@ -166,5 +235,5 @@
     return Promise.resolve();
   }
 
-  W.Reel = { Store: Store, MOODS: MOODS, captionsFor: captionsFor, render: render, thumbOf: thumbOf, exportVideo: exportVideo };
+  W.Reel = { Store: Store, MOODS: MOODS, STYLES: STYLES, captionsFor: captionsFor, render: render, thumbOf: thumbOf, exportVideo: exportVideo };
 })(window);

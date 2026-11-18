@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<link rel="manifest" href="../manifest.json"><meta name="theme-color" content="#0B0B0F"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ReelMate"><link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ReelMate Onboarding</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Pretendard:wght@400;500;600;700;800;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary-fixed-variant": "#90003e",
+            "surface-dim": "#13131a",
+            "on-tertiary-fixed-variant": "#5516be",
+            "secondary-container": "#b95502",
+            "error": "#ffb4ab",
+            "surface-tint": "#ffb1c1",
+            "on-primary-container": "#5a0024",
+            "inverse-on-surface": "#303038",
+            "surface-container-low": "#1b1b23",
+            "on-surface-variant": "#e2bdc3",
+            "surface": "#13131a",
+            "on-tertiary-container": "#340080",
+            "on-primary": "#66002a",
+            "outline": "#aa888e",
+            "tertiary-fixed-dim": "#d0bcff",
+            "on-surface": "#e4e1ec",
+            "outline-variant": "#5a4045",
+            "primary-fixed-dim": "#ffb1c1",
+            "on-error": "#690005",
+            "secondary-fixed-dim": "#ffb68d",
+            "inverse-primary": "#bb0053",
+            "primary": "#ffb1c1",
+            "surface-variant": "#34343d",
+            "tertiary": "#d0bcff",
+            "tertiary-container": "#a078ff",
+            "inverse-surface": "#e4e1ec",
+            "surface-container-high": "#292932",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed-variant": "#763300",
+            "on-primary-fixed": "#3f0017",
+            "surface-container-highest": "#34343d",
+            "surface-container-lowest": "#0d0d15",
+            "on-secondary-fixed": "#321200",
+            "on-secondary": "#532200",
+            "background": "#13131a",
+            "on-secondary-container": "#fff7f4",
+            "surface-bright": "#393841",
+            "secondary": "#ffb68d",
+            "on-tertiary": "#3c0091",
+            "error-container": "#93000a",
+            "primary-container": "#ff4c85",
+            "primary-fixed": "#ffd9df",
+            "on-tertiary-fixed": "#23005c",
+            "on-background": "#e4e1ec",
+            "tertiary-fixed": "#e9ddff",
+            "secondary-fixed": "#ffdbc9",
+            "surface-container": "#1f1f27"
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "gutter": "0.75rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1.5rem"
+          },
+          fontFamily: {
+            "label-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "code-metric": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "label-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "display-hero": ["Pretendard", "Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Pretendard", "Plus Jakarta Sans", "sans-serif"]
+          },
+          fontSize: {
+            "label-sm": ["11px", { lineHeight: "14px", fontWeight: "500" }],
+            "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "code-metric": ["13px", { lineHeight: "16px", fontWeight: "700" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "headline-md": ["22px", { lineHeight: "28px", fontWeight: "700" }],
+            "label-lg": ["14px", { lineHeight: "18px", fontWeight: "600" }],
+            "label-md": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+            "display-hero": ["34px", { lineHeight: "42px", fontWeight: "800" }],
+            "headline-lg": ["30px", { lineHeight: "38px", fontWeight: "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .hero-glow-ambient {
+      background: radial-gradient(circle at 50% 20%, rgba(255, 76, 133, 0.28) 0%, rgba(255, 138, 61, 0.18) 35%, rgba(19, 19, 26, 0) 75%);
+    }
+    .neon-pulse-btn {
+      box-shadow: 0 8px 24px rgba(255, 61, 127, 0.35), 0 0 35px rgba(255, 138, 61, 0.2);
+    }
+    .floating-card-shadow {
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(90, 64, 69, 0.4);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col justify-between selection:bg-primary selection:text-on-primary">
+<!-- Atmospheric Pink/Orange Neon Glow Layer -->
+<div class="fixed inset-0 pointer-events-none hero-glow-ambient z-0"></div>
+<!-- Ambient Light Orbs -->
+<div class="fixed -top-16 left-1/2 -translate-x-1/2 w-80 h-80 bg-primary-container/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+<div class="fixed top-36 right-0 w-64 h-64 bg-secondary-container/15 rounded-full blur-3xl pointer-events-none z-0"></div>
+<!-- Top System Bar & Onboarding Skip Trigger -->
+<header class="relative z-20 w-full max-w-md mx-auto pt-6 px-6 flex justify-between items-center">
+<!-- ReelMate Brand Watermark -->
+<div class="flex items-center gap-1.5">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-container to-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-surface-container-lowest text-[16px]" style="font-variation-settings: 'FILL' 1;">auto_videocam</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+        ReelMate
+      </span>
+</div>
+<!-- Top Right Skip Action (건너뛰기) -->
+<button class="px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface bg-surface-container-high/40 hover:bg-surface-container-high border border-outline-variant/30 font-label-md text-label-md transition-all active:scale-95" type="button">
+      건너뛰기
+    </button>
+</header>
+<!-- Main Hero Canvas: Phone Mockup with Dynamic Short-form Creator UI -->
+<main class="relative z-10 flex-1 flex flex-col justify-center items-center px-4 pt-3 pb-4 max-w-md mx-auto w-full">
+<!-- Vertical Video Creator Mockup Container -->
+<div class="relative w-full max-w-[290px] aspect-[9/15.5] bg-surface-container-low rounded-xl border border-outline-variant/50 p-2.5 flex flex-col justify-between floating-card-shadow overflow-hidden group">
+<!-- Video Frame Interior Canvas -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover filter brightness-[0.88] contrast-[1.08] transition-transform duration-700 group-hover:scale-105" data-alt="A stylish young woman dancing in a vibrant neon-lit cyberpunk city alley at night with dazzling purple, magenta, and amber neon reflections on the damp asphalt. The composition is a vertical 9:16 high-fashion short-form video frame with cinematic lens flare, dynamic camera tilt, high-octane mood, and razor-sharp clarity suited for social media reels." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFuGCKv5cryRk-1v916gdnEniPxKWZG4FNQ5JGCnN_LoDQNGgBTWthX_DCqDcWk9VzJwtssNC-B4XW1bzH7e-2g3SEE61kxRuIWPkDTb8Zx2n1cXbW2tHZiblnG-sffZmIFPRan8znq0QOG8i4g_Af0DqFke5bGDM9BFt8SuuM4LC8lO38xRoFoS-lBXVjbNL7D-GhjQ9BRbhyfZMaWYRMu25ULfRig_R2fah0nW8"/>
+<!-- Gradients over media for UI contrast -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest/60"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/10 to-transparent"></div>
+</div>
+<!-- Top Overlay: Live AI Processing Status Badge -->
+<div class="relative z-10 flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant/60 shadow-lg">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="w-2 h-2 rounded-full bg-primary-container -ml-3.5"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold tracking-wide">AI 오토 컷팅 중</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high/70 backdrop-blur-md border border-outline-variant/50 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<!-- Center Floating Floating Dynamic Sparkle Card -->
+<div class="relative z-10 self-center px-4 py-2 rounded-lg bg-surface-container/85 backdrop-blur-xl border border-primary-container/40 flex items-center gap-2.5 shadow-2xl">
+<div class="w-7 h-7 rounded-full bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-container-lowest text-[16px]">bolt</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-on-surface">1.2초 만에 비트 매칭</p>
+<p class="font-body-sm text-[10px] leading-3 text-secondary">트렌드 사운드 동기화 완료</p>
+</div>
+</div>
+<!-- Bottom In-frame Deck: Audio Waveform & Multi-Platform Syndication Badges -->
+<div class="relative z-10 space-y-2">
+<!-- Floating Audio Waveform Pill -->
+<div class="px-3 py-2 rounded-DEFAULT bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">graphic_eq</span>
+<div class="flex items-end gap-[3px] h-4">
+<span class="w-1 h-2 bg-primary-container rounded-full animate-pulse"></span>
+<span class="w-1 h-3.5 bg-primary-container rounded-full"></span>
+<span class="w-1 h-1.5 bg-secondary rounded-full"></span>
+<span class="w-1 h-4 bg-primary rounded-full animate-bounce"></span>
+<span class="w-1 h-2.5 bg-secondary-container rounded-full"></span>
+<span class="w-1 h-3 bg-primary-container rounded-full"></span>
+<span class="w-1 h-1.5 bg-outline rounded-full"></span>
+<span class="w-1 h-3.5 bg-primary rounded-full"></span>
+</div>
+</div>
+<span class="font-code-metric text-[10px] text-on-surface-variant font-mono">00:15 / 4K 60fps</span>
+</div>
+<!-- Platform Badges: Instagram Reels, YouTube Shorts, Story -->
+<div class="flex items-center justify-between gap-1.5 pt-0.5">
+<!-- Instagram Reels Badge -->
+<div class="flex-1 flex items-center justify-center gap-1 py-1 rounded-full bg-surface-container-high/80 border border-outline-variant/40 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary-container text-[14px]" style="font-variation-settings: 'FILL' 1;">movie</span>
+<span class="font-label-sm text-[10px] text-on-surface">Reels</span>
+</div>
+<!-- YouTube Shorts Badge -->
+<div class="flex-1 flex items-center justify-center gap-1 py-1 rounded-full bg-surface-container-high/80 border border-outline-variant/40 backdrop-blur-md">
+<span class="material-symbols-outlined text-secondary text-[14px]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-label-sm text-[10px] text-on-surface">Shorts</span>
+</div>
+<!-- Story Badge -->
+<div class="flex-1 flex items-center justify-center gap-1 py-1 rounded-full bg-surface-container-high/80 border border-outline-variant/40 backdrop-blur-md">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[14px]" style="font-variation-settings: 'FILL' 1;">history_toggle_off</span>
+<span class="font-label-sm text-[10px] text-on-surface">Story</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Interactive Presentation Section -->
+<footer class="relative z-20 w-full max-w-md mx-auto px-6 pb-9 pt-2 flex flex-col items-center text-center">
+<!-- Headline Section -->
+<div class="space-y-2 mb-6">
+<h1 class="font-display-hero text-display-hero tracking-tight text-on-surface">
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-primary to-secondary">
+          찍기만
+        </span> 하세요
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[310px] mx-auto leading-relaxed word-break break-keep">
+        사진과 짧은 동영상만 올리면 AI가 알아서 트렌디한 릴스와 쇼츠를 완성해 드려요.
+      </p>
+</div>
+<!-- Pagination Dots Indicator: 3 dots, first active as pill gradient -->
+<div aria-label="온보딩 단계 인디케이터" class="flex items-center gap-2 mb-7" role="tablist">
+<!-- Active Dot 1 (Gradient Pill) -->
+<span aria-current="step" aria-label="1단계" class="w-7 h-2 rounded-full bg-gradient-to-r from-primary-container to-secondary shadow-sm transition-all duration-300"></span>
+<!-- Dot 2 -->
+<span aria-label="2단계" class="w-2 h-2 rounded-full bg-surface-variant transition-all hover:bg-outline"></span>
+<!-- Dot 3 -->
+<span aria-label="3단계" class="w-2 h-2 rounded-full bg-surface-variant transition-all hover:bg-outline"></span>
+</div>
+<!-- Primary Action Button: "시작하기" Gradient Pill -->
+<button class="w-full h-14 rounded-full bg-gradient-to-r from-[#FF3D7F] to-[#FF8A3D] text-on-secondary-container font-headline-sm text-headline-sm font-bold flex items-center justify-center gap-2 neon-pulse-btn hover:opacity-95 active:scale-[0.98] transition-all duration-150 group cursor-pointer" type="button">
+<span>시작하기</span>
+<span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:translate-x-1" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+<!-- Bottom Subtle Sign-in Cue -->
+<div class="mt-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant/70">
+        이미 계정이 있으신가요? 
+        <a class="text-primary hover:underline font-semibold ml-1" href="#">로그인</a>
+</span>
+</div>
+</footer>
+<script>window.SCREEN="onboarding"</script><script src="../config.js" defer></script><script src="../vendor/glfx.js" defer></script><script src="../vendor/smartcrop.js" defer></script><script src="../edit.js" defer></script><script src="../reel.js" defer></script><script src="../account.js" defer></script><script src="../nav.js" defer></script>
+</body></html>

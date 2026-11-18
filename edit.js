@@ -83,5 +83,7 @@
       return { fg: graded, bg: blurredBg(graded), mode: "fit", zoom: zoom };
     });
   }
-  W.ReelEdit = { prepare: prepare, webgl: function () { return !!getFx(); } };
+  // 동영상 배경용: 썸네일로 흐린 배경만 만든다
+  function bgOf(dataUrl) { return loadImg(dataUrl).then(blurredBg); }
+  W.ReelEdit = { prepare: prepare, bgOf: bgOf, webgl: function () { return !!getFx(); } };
 })(window);
